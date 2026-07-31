@@ -1,0 +1,1441 @@
+/* ===============================
+   🌈 VARIABLES GLOBALES
+================================ */
+:root {
+  /* ⚙️ Contrôles d'opacité et intensité */
+  --bg-opacity: 1;
+  --overlay-opacity: 0.85;
+  --orange-intensity: 0.25;
+  --blue-intensity: 0.25;
+  --blur-intensity: 20px;
+
+  /* 🌌 Image de fond */
+  --image-brightness: 0.65;
+  --image-contrast: 1.15;
+  --image-saturation: 1.15;
+  --image-blur: 10px;
+
+  /* 🌟 Effets lumineux & profondeur */
+  --orange-glow-opacity: 0.3;
+  --badge-orange-intensity: 0.45;
+  --base-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --transition-base: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===============================
+   🌠 HERO SECTION BACKGROUND
+================================ */
+.hero-bg {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(249, 115, 22, var(--orange-intensity)), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(59, 130, 246, var(--blue-intensity)), transparent 55%),
+    linear-gradient(to right, rgba(2, 6, 23, var(--bg-opacity)), rgba(2, 6, 23, var(--bg-opacity)));
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+  backdrop-filter: blur(var(--blur-intensity));
+  -webkit-backdrop-filter: blur(var(--blur-intensity));
+  box-shadow: var(--soft-shadow);
+}
+/* ===============================
+   🌈 VARIABLES GLOBALES
+================================ */
+:root {
+  /* ⚙️ Contrôles d'opacité et intensité */
+  --bg-opacity: 1;
+  --overlay-opacity: 0.85;
+  --orange-intensity: 0.25;
+  --blue-intensity: 0.25;
+  --blur-intensity: 20px;
+
+  /* 🌌 Image de fond */
+  --image-brightness: 0.65;
+  --image-contrast: 1.15;
+  --image-saturation: 1.15;
+  --image-blur: 10px;
+
+  /* 🌟 Effets lumineux & profondeur */
+  --orange-glow-opacity: 0.3;
+  --badge-orange-intensity: 0.45;
+  --base-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --transition-base: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ===============================
+   🌠 HERO SECTION BACKGROUND
+================================ */
+.hero-bg {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(249, 115, 22, var(--orange-intensity)), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(59, 130, 246, var(--blue-intensity)), transparent 55%),
+    linear-gradient(to right, rgba(2, 6, 23, var(--bg-opacity)), rgba(2, 6, 23, var(--bg-opacity)));
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+  backdrop-filter: blur(var(--blur-intensity));
+  -webkit-backdrop-filter: blur(var(--blur-intensity));
+  box-shadow: var(--soft-shadow);
+}
+/* ===============================
+   🏔️ FULL COVER PARFAIT TOUS ÉCRANS
+================================ */
+.baobab-bg {
+  position: absolute;
+  inset: 0;
+  background: url('/images/cover.jpg') center center / cover no-repeat;
+  filter:
+    brightness(var(--image-brightness))
+    contrast(var(--image-contrast))
+    saturate(var(--image-saturation))
+    blur(var(--image-blur));
+  z-index: 0;
+  opacity: 0.85;
+  background-attachment: scroll; /* ✅ fluide partout */
+  height: 100vh; /* ✅ couvre toute la hauteur viewport */
+  width: 100vw;  /* ✅ couvre toute la largeur viewport */
+}
+
+
+/* ===============================
+   ☀️ ECLAIRAGE ORANGE DIFFUS
+================================ */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(249, 115, 22, calc(var(--orange-intensity) * 0.7)), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, calc(var(--blue-intensity) * 0.55)), transparent 50%);
+  filter: blur(80px);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* ===============================
+   💫 CURSEUR LUMINEUX
+================================ */
+.cursor-glow {
+  pointer-events: none;
+  background: radial-gradient(circle at center,
+      rgba(249, 115, 22, var(--orange-glow-opacity)),
+      rgba(249, 115, 22, calc(var(--orange-glow-opacity) * 0.3)) 50%,
+      transparent 70%);
+  filter: blur(12px);
+}
+
+/* ===============================
+   🌈 TITRE / TEXTES AVEC FOND
+================================ */
+.title-gradient {
+  display: inline-block;
+  background: linear-gradient(135deg,
+      #fbbf24 0%,
+      #f38c42 25%,
+      #f0eeec 50%,
+      #f38c42 75%,
+      #fbbf24 100%);
+  background-size: 250% 250%;
+  animation: gradient-shift 10s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+}
+
+.text-glass-bg {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  display: inline-block;
+}
+
+/* ===============================
+   🔘 BOUTONS PREMIUM
+================================ */
+.btn-primary-orange {
+  background: linear-gradient(135deg, #facc15, #f97316);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  transition: var(--transition-base);
+}
+
+.btn-primary-orange:hover {
+  background: linear-gradient(135deg, #facc15, #f97316);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 35px rgba(249, 115, 22, 0.7);
+}
+
+.btn-outline-orange {
+  background: transparent;
+  color: white;
+  font-weight: 600;
+  backdrop-filter: blur(15px);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  transition: var(--transition-base);
+}
+
+.btn-outline-orange:hover {
+  background: rgba(249, 115, 22, 0.15);
+  color: white;
+  border-color: rgba(249, 115, 22, 0.8);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+}
+/* Badges Container */
+.badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.8rem;
+  padding: 1.5rem;
+}
+
+/* Badge Item */
+.badge-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.08) 0%, 
+              rgba(255, 255, 255, 0.03) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.2rem;
+  padding: 1.5rem 2.2rem;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 260px;
+  max-width: 320px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Effet de brillance subtil */
+.badge-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.7s ease;
+}
+
+.badge-item:hover::before {
+  left: 100%;
+}
+
+/* Effet de surbrillance sur hover */
+.badge-item:hover {
+  background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.12) 0%, 
+              rgba(255, 255, 255, 0.05) 100%);
+  border-color: rgba(249, 115, 22, 0.6);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 
+    0 18px 40px rgba(249, 115, 22, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Effet de pulse subtil */
+@keyframes badge-pulse {
+  0%, 100% { 
+    box-shadow: 
+      0 8px 20px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+  }
+  50% { 
+    box-shadow: 
+      0 8px 25px rgba(249, 115, 22, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+  }
+}
+
+.badge-item {
+  animation: badge-pulse 4s infinite ease-in-out;
+}
+
+/* Icône de validation */
+.badge-item::after {
+  content: '✓';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(249, 115, 22, 0.4);
+  z-index: 2;
+}
+
+.badge-item:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Badge Content */
+.badge-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Badge Text */
+.badge-text {
+  color: rgba(255, 255, 255, 0.98);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .badges-container {
+    gap: 1.2rem;
+    padding: 1rem;
+  }
+  
+  .badge-item {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 1.2rem 1.5rem;
+  }
+}
+/* ===============================
+   🎬 ANIMATIONS
+================================ */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.2; }
+  25% { transform: translate(10px, -15px) rotate(90deg); opacity: 0.4; }
+  50% { transform: translate(5px, -30px) rotate(180deg); opacity: 0.2; }
+  75% { transform: translate(-5px, -20px) rotate(270deg); opacity: 0.4; }
+}
+
+@keyframes gradient-x {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ===============================
+   🏷️ LOGO PRINCIPAL AU-DESSUS DU CADRE - ORANGE/JAUNE
+================================ */
+.aria-logo {
+  filter: 
+    drop-shadow(0 8px 24px rgba(249, 115, 22, 0.5))
+    drop-shadow(0 8px 24px rgba(251, 191, 36, 0.4));
+  /* Cercle jaune-orange sans contour visible */
+  background: radial-gradient(
+    circle at center,
+    rgba(249, 115, 22, 0.2) 0%,
+    rgba(251, 191, 36, 0.15) 40%,
+    transparent 60%
+  );
+  padding: 20px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 40;
+  width: fit-content;
+  height: fit-content;
+  /* Suppression de tout ce qui crée un contour */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Effet de lueur diffuse sans contour */
+.aria-logo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(249, 115, 22, 0.25) 0%,
+    rgba(251, 191, 36, 0.2) 30%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  z-index: 0;
+  animation: softGlow 4s ease-in-out infinite;
+  /* Pas de bordure, pas de contour */
+  border: none;
+  box-shadow: none;
+}
+
+@keyframes softGlow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.aria-logo img {
+  position: relative;
+  z-index: 1;
+  margin: -5px;
+}
+
+/* ===============================
+   💠 CADRE AVEC FUSION SOUS LE LOGO
+================================ */
+.logo-glass-blur {
+  background: rgba(8, 12, 25, 0.85) !important;
+  backdrop-filter: blur(30px) saturate(1.8);
+  -webkit-backdrop-filter: blur(30px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    inset 0 0 100px rgba(249, 115, 22, 0.2),
+    inset 0 0 100px rgba(59, 130, 246, 0.15),
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  margin-top: 4rem;
+  padding-top: 6rem;
+  z-index: 10;
+}
+
+/* Effet de fusion entre le logo et le cadre */
+.logo-glass-blur::before {
+  content: '';
+  position: absolute;
+  top: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 6rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 12, 25, 0.9) 0%,
+    rgba(8, 12, 25, 0.3) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  filter: blur(30px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Effet de halo autour du cadre */
+.logo-glass-blur::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    rgba(249, 115, 22, 0.1),
+    rgba(59, 130, 246, 0.1),
+    rgba(249, 115, 22, 0.1)
+  );
+  border-radius: 3.25rem;
+  z-index: -2;
+  filter: blur(12px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ===============================
+   🎬 CARROUSEL
+================================ */
+.carousel-gsap img {
+  transition: opacity 1.2s ease-in-out;
+  will-change: opacity;
+}
+
+.carousel-gsap {
+  position: relative;
+  z-index: 20;
+}
+
+/* ===============================
+   💫 ANIMATION DES LOGOS TOMBANTS
+================================ */
+.aria-logo-fall-container {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  border-radius: 3rem;
+  z-index: 0;
+}
+
+.aria-logo-drop {
+  animation: ariaLogoFall linear infinite;
+  animation-play-state: running;
+  will-change: transform, opacity;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
+
+@keyframes ariaLogoFall {
+  0% {
+    transform: 
+      translateY(-100px)
+      translateX(calc(var(--start-x) - 50%))
+      rotate(0deg)
+      scale(calc(var(--scale, 1) * 0.7));
+    opacity: 0;
+  }
+  5% {
+    opacity: var(--opacity, 0.3);
+    transform: 
+      translateY(0px)
+      translateX(calc(var(--start-x) - 50%))
+      rotate(0deg)
+      scale(calc(var(--scale, 1) * 0.8));
+  }
+  15% {
+    opacity: calc(var(--opacity, 0.3) * 1.3);
+    transform: 
+      translateY(100px)
+      translateX(calc(var(--start-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 90deg))
+      scale(var(--scale, 1));
+  }
+  50% {
+    opacity: var(--opacity, 0.3);
+    transform: 
+      translateY(calc(50vh))
+      translateX(calc((var(--start-x) + var(--end-x)) / 2 - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 180deg))
+      scale(calc(var(--scale, 1) * 1.1));
+  }
+  85% {
+    opacity: calc(var(--opacity, 0.3) * 0.8);
+    transform: 
+      translateY(calc(100vh - 100px))
+      translateX(calc(var(--end-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 270deg))
+      scale(var(--scale, 1));
+  }
+  95% {
+    opacity: 0.1;
+    transform: 
+      translateY(calc(100vh))
+      translateX(calc(var(--end-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 300deg))
+      scale(calc(var(--scale, 1) * 0.9));
+  }
+  100% {
+    transform: 
+      translateY(calc(100vh + 100px))
+      translateX(calc(var(--end-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 360deg))
+      scale(calc(var(--scale, 1) * 0.6));
+    opacity: 0;
+  }
+}
+
+/* Effet de traînée lumineuse */
+.aria-logo-drop::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  width: 3px;
+  height: 150px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(249, 115, 22, 0.4),
+    rgba(59, 130, 246, 0.4),
+    transparent
+  );
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(2px);
+}
+
+/* Effet de particules */
+.aria-logo-drop::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(249, 115, 22, 0.1) 0%,
+    rgba(59, 130, 246, 0.05) 30%,
+    transparent 60%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -2;
+  animation: particlePulse 2s ease-in-out infinite;
+}
+
+@keyframes particlePulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+/* Rotation subtile de l'image */
+.aria-logo-drop img {
+  animation: logoFloat 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0px);
+  }
+  25% {
+    transform: rotate(1deg) translateY(-2px);
+  }
+  75% {
+    transform: rotate(-1deg) translateY(2px);
+  }
+}
+
+/* Effet au survol */
+.aria-logo-drop:hover img {
+  filter: 
+    drop-shadow(0 4px 12px rgba(249, 115, 22, 0.6))
+    drop-shadow(0 4px 12px rgba(59, 130, 246, 0.6))
+    !important;
+  transform: scale(1.2) rotate(5deg);
+  animation-play-state: paused;
+}
+
+/* Variation de timing */
+.aria-logo-drop:nth-child(3n) {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aria-logo-drop:nth-child(3n+1) {
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.8, 0.2);
+}
+
+.aria-logo-drop:nth-child(3n+2) {
+  animation-timing-function: ease-in-out;
+}
+
+/* ===============================
+   📱 RESPONSIVE DESIGN
+================================ */
+@media (max-width: 1024px) {
+  .hero-bg { 
+    --blur-intensity: 15px; 
+    --image-blur: 8px; 
+  }
+  .aria-logo {
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+  }
+  .logo-glass-blur {
+    margin-top: 3.5rem;
+    padding-top: 5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-bg {
+    padding-top: 100px;
+    padding-bottom: 40px;
+    --blur-intensity: 12px;
+    --image-blur: 6px;
+    --image-brightness: 0.45;
+  }
+  .badges-container { 
+    flex-direction: column; 
+    align-items: center; 
+  }
+  .aria-logo {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+  }
+  .aria-line {
+    width: 60px;
+    height: 2px;
+  }
+  .logo-glass-blur {
+    margin-top: 3rem;
+    padding-top: 4.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-bg {
+    padding-top: 90px;
+    padding-bottom: 30px;
+    --blur-intensity: 10px;
+    --image-blur: 5px;
+    --image-brightness: 0.35;
+  }
+  .badge-item {
+    width: 100%;
+    padding: 1rem 1.5rem;
+  }
+  .aria-logo {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+  .aria-line {
+    width: 40px;
+  }
+  .logo-glass-blur {
+    margin-top: 2.5rem;
+    padding-top: 4rem;
+  }
+}
+
+/* ===============================
+   ☀️ ECLAIRAGE ORANGE DIFFUS
+================================ */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(249, 115, 22, calc(var(--orange-intensity) * 0.7)), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(59, 130, 246, calc(var(--blue-intensity) * 0.55)), transparent 50%);
+  filter: blur(80px);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* ===============================
+   💫 CURSEUR LUMINEUX
+================================ */
+.cursor-glow {
+  pointer-events: none;
+  background: radial-gradient(circle at center,
+      rgba(249, 115, 22, var(--orange-glow-opacity)),
+      rgba(249, 115, 22, calc(var(--orange-glow-opacity) * 0.3)) 50%,
+      transparent 70%);
+  filter: blur(12px);
+}
+
+/* ===============================
+   🌈 TITRE / TEXTES AVEC FOND
+================================ */
+.title-gradient {
+  display: inline-block;
+  background: linear-gradient(135deg,
+      #fbbf24 0%,
+      #f38c42 25%,
+      #f0eeec 50%,
+      #f38c42 75%,
+      #fbbf24 100%);
+  background-size: 250% 250%;
+  animation: gradient-shift 10s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+}
+
+.text-glass-bg {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  display: inline-block;
+}
+
+/* ===============================
+   🔘 BOUTONS PREMIUM
+================================ */
+.btn-primary-orange {
+  background: linear-gradient(135deg, #facc15, #f97316);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  transition: var(--transition-base);
+}
+
+.btn-primary-orange:hover {
+  background: linear-gradient(135deg, #facc15, #f97316);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 35px rgba(249, 115, 22, 0.7);
+}
+
+.btn-outline-orange {
+  background: transparent;
+  color: white;
+  font-weight: 600;
+  backdrop-filter: blur(15px);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  transition: var(--transition-base);
+}
+
+.btn-outline-orange:hover {
+  background: rgba(249, 115, 22, 0.15);
+  color: white;
+  border-color: rgba(249, 115, 22, 0.8);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+}
+/* Badges Container */
+.badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.8rem;
+  padding: 1.5rem;
+}
+
+/* Badge Item */
+.badge-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.08) 0%, 
+              rgba(255, 255, 255, 0.03) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.2rem;
+  padding: 1.5rem 2.2rem;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 260px;
+  max-width: 320px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Effet de brillance subtil */
+.badge-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.7s ease;
+}
+
+.badge-item:hover::before {
+  left: 100%;
+}
+
+/* Effet de surbrillance sur hover */
+.badge-item:hover {
+  background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.12) 0%, 
+              rgba(255, 255, 255, 0.05) 100%);
+  border-color: rgba(249, 115, 22, 0.6);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 
+    0 18px 40px rgba(249, 115, 22, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Effet de pulse subtil */
+@keyframes badge-pulse {
+  0%, 100% { 
+    box-shadow: 
+      0 8px 20px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+  }
+  50% { 
+    box-shadow: 
+      0 8px 25px rgba(249, 115, 22, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+  }
+}
+
+.badge-item {
+  animation: badge-pulse 4s infinite ease-in-out;
+}
+
+/* Icône de validation */
+.badge-item::after {
+  content: '✓';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(249, 115, 22, 0.4);
+  z-index: 2;
+}
+
+.badge-item:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Badge Content */
+.badge-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Badge Text */
+.badge-text {
+  color: rgba(255, 255, 255, 0.98);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .badges-container {
+    gap: 1.2rem;
+    padding: 1rem;
+  }
+  
+  .badge-item {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 1.2rem 1.5rem;
+  }
+}
+/* ===============================
+   🎬 ANIMATIONS
+================================ */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.2; }
+  25% { transform: translate(10px, -15px) rotate(90deg); opacity: 0.4; }
+  50% { transform: translate(5px, -30px) rotate(180deg); opacity: 0.2; }
+  75% { transform: translate(-5px, -20px) rotate(270deg); opacity: 0.4; }
+}
+
+@keyframes gradient-x {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ===============================
+   🏷️ LOGO PRINCIPAL AU-DESSUS DU CADRE - ORANGE/JAUNE
+================================ */
+.aria-logo {
+  filter: 
+    drop-shadow(0 8px 24px rgba(249, 115, 22, 0.5))
+    drop-shadow(0 8px 24px rgba(251, 191, 36, 0.4));
+  /* Cercle jaune-orange sans contour visible */
+  background: radial-gradient(
+    circle at center,
+    rgba(249, 115, 22, 0.2) 0%,
+    rgba(251, 191, 36, 0.15) 40%,
+    transparent 60%
+  );
+  padding: 20px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 40;
+  width: fit-content;
+  height: fit-content;
+  /* Suppression de tout ce qui crée un contour */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Effet de lueur diffuse sans contour */
+.aria-logo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(249, 115, 22, 0.25) 0%,
+    rgba(251, 191, 36, 0.2) 30%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  z-index: 0;
+  animation: softGlow 4s ease-in-out infinite;
+  /* Pas de bordure, pas de contour */
+  border: none;
+  box-shadow: none;
+}
+
+@keyframes softGlow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.aria-logo img {
+  position: relative;
+  z-index: 1;
+  margin: -5px;
+}
+
+/* ===============================
+   💠 CADRE AVEC FUSION SOUS LE LOGO
+================================ */
+.logo-glass-blur {
+  background: rgba(8, 12, 25, 0.85) !important;
+  backdrop-filter: blur(30px) saturate(1.8);
+  -webkit-backdrop-filter: blur(30px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    inset 0 0 100px rgba(249, 115, 22, 0.2),
+    inset 0 0 100px rgba(59, 130, 246, 0.15),
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  margin-top: 4rem;
+  padding-top: 6rem;
+  z-index: 10;
+}
+
+/* Effet de fusion entre le logo et le cadre */
+.logo-glass-blur::before {
+  content: '';
+  position: absolute;
+  top: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 6rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 12, 25, 0.9) 0%,
+    rgba(8, 12, 25, 0.3) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  filter: blur(30px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Effet de halo autour du cadre */
+.logo-glass-blur::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    rgba(249, 115, 22, 0.1),
+    rgba(59, 130, 246, 0.1),
+    rgba(249, 115, 22, 0.1)
+  );
+  border-radius: 3.25rem;
+  z-index: -2;
+  filter: blur(12px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ===============================
+   🎬 CARROUSEL
+================================ */
+.carousel-gsap img {
+  transition: opacity 1.2s ease-in-out;
+  will-change: opacity;
+}
+
+.carousel-gsap {
+  position: relative;
+  z-index: 20;
+}
+
+/* ===============================
+   💫 ANIMATION DES LOGOS TOMBANTS
+================================ */
+.aria-logo-fall-container {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  border-radius: 3rem;
+  z-index: 0;
+}
+
+.aria-logo-drop {
+  animation: ariaLogoFall linear infinite;
+  animation-play-state: running;
+  will-change: transform, opacity;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
+
+@keyframes ariaLogoFall {
+  0% {
+    transform: 
+      translateY(-100px)
+      translateX(calc(var(--start-x) - 50%))
+      rotate(0deg)
+      scale(calc(var(--scale, 1) * 0.7));
+    opacity: 0;
+  }
+  5% {
+    opacity: var(--opacity, 0.3);
+    transform: 
+      translateY(0px)
+      translateX(calc(var(--start-x) - 50%))
+      rotate(0deg)
+      scale(calc(var(--scale, 1) * 0.8));
+  }
+  15% {
+    opacity: calc(var(--opacity, 0.3) * 1.3);
+    transform: 
+      translateY(100px)
+      translateX(calc(var(--start-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 90deg))
+      scale(var(--scale, 1));
+  }
+  50% {
+    opacity: var(--opacity, 0.3);
+    transform: 
+      translateY(calc(50vh))
+      translateX(calc((var(--start-x) + var(--end-x)) / 2 - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 180deg))
+      scale(calc(var(--scale, 1) * 1.1));
+  }
+  85% {
+    opacity: calc(var(--opacity, 0.3) * 0.8);
+    transform: 
+      translateY(calc(100vh - 100px))
+      translateX(calc(var(--end-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 270deg))
+      scale(var(--scale, 1));
+  }
+  95% {
+    opacity: 0.1;
+    transform: 
+      translateY(calc(100vh))
+      translateX(calc(var(--end-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 300deg))
+      scale(calc(var(--scale, 1) * 0.9));
+  }
+  100% {
+    transform: 
+      translateY(calc(100vh + 100px))
+      translateX(calc(var(--end-x) - 50%))
+      rotate(calc(var(--rotation-speed, 1) * 360deg))
+      scale(calc(var(--scale, 1) * 0.6));
+    opacity: 0;
+  }
+}
+
+/* Effet de traînée lumineuse */
+.aria-logo-drop::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  width: 3px;
+  height: 150px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(249, 115, 22, 0.4),
+    rgba(59, 130, 246, 0.4),
+    transparent
+  );
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(2px);
+}
+
+/* Effet de particules */
+.aria-logo-drop::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(249, 115, 22, 0.1) 0%,
+    rgba(59, 130, 246, 0.05) 30%,
+    transparent 60%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -2;
+  animation: particlePulse 2s ease-in-out infinite;
+}
+
+@keyframes particlePulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+/* Rotation subtile de l'image */
+.aria-logo-drop img {
+  animation: logoFloat 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0px);
+  }
+  25% {
+    transform: rotate(1deg) translateY(-2px);
+  }
+  75% {
+    transform: rotate(-1deg) translateY(2px);
+  }
+}
+
+/* Effet au survol */
+.aria-logo-drop:hover img {
+  filter: 
+    drop-shadow(0 4px 12px rgba(249, 115, 22, 0.6))
+    drop-shadow(0 4px 12px rgba(59, 130, 246, 0.6))
+    !important;
+  transform: scale(1.2) rotate(5deg);
+  animation-play-state: paused;
+}
+
+/* Variation de timing */
+.aria-logo-drop:nth-child(3n) {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aria-logo-drop:nth-child(3n+1) {
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.8, 0.2);
+}
+
+.aria-logo-drop:nth-child(3n+2) {
+  animation-timing-function: ease-in-out;
+}
+
+/* ===============================
+   📱 RESPONSIVE DESIGN
+================================ */
+@media (max-width: 1024px) {
+  .hero-bg { 
+    --blur-intensity: 15px; 
+    --image-blur: 8px; 
+  }
+  .aria-logo {
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+  }
+  .logo-glass-blur {
+    margin-top: 3.5rem;
+    padding-top: 5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-bg {
+    padding-top: 100px;
+    padding-bottom: 40px;
+    --blur-intensity: 12px;
+    --image-blur: 6px;
+    --image-brightness: 0.45;
+  }
+  .badges-container { 
+    flex-direction: column; 
+    align-items: center; 
+  }
+  .aria-logo {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+  }
+  .aria-line {
+    width: 60px;
+    height: 2px;
+  }
+  .logo-glass-blur {
+    margin-top: 3rem;
+    padding-top: 4.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-bg {
+    padding-top: 90px;
+    padding-bottom: 30px;
+    --blur-intensity: 10px;
+    --image-blur: 5px;
+    --image-brightness: 0.35;
+  }
+  .badge-item {
+    width: 100%;
+    padding: 1rem 1.5rem;
+  }
+  .aria-logo {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+  .aria-line {
+    width: 40px;
+  }
+  .logo-glass-blur {
+    margin-top: 2.5rem;
+    padding-top: 4rem;
+  }
+}
+.hero-slogan {
+  /* Gradient élégant "soleil couchant premium" */
+  background: 
+    linear-gradient(135deg, 
+      rgba(252, 211, 77, 0.95) 0%, 
+      rgba(255, 193, 7, 0.9) 25%, 
+      rgba(255, 165, 0, 0.85) 50%, 
+      rgba(245, 158, 11, 0.8) 75%, 
+      rgba(234, 179, 8, 0.75) 100%
+    );
+  background-size: 250% 250%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Ombre subtile et raffinée */
+  text-shadow: 
+    0 1px 2px rgba(251, 191, 36, 0.3),
+    0 2px 8px rgba(255, 165, 0, 0.25),
+    0 4px 16px rgba(249, 115, 22, 0.15);
+  
+  /* Animation élégante */
+  animation: sunElegance 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+@keyframes sunElegance {
+  0% {
+    background-position: 0% 0%;
+    text-shadow: 
+      0 1px 1px rgba(251, 191, 36, 0.35),
+      0 2px 6px rgba(255, 165, 0, 0.3),
+      0 4px 12px rgba(249, 115, 22, 0.2);
+    transform: translateY(0px);
+  }
+  100% {
+    background-position: 100% 100%;
+    text-shadow: 
+      0 1px 2px rgba(251, 191, 36, 0.45),
+      0 3px 10px rgba(255, 165, 0, 0.4),
+      0 6px 20px rgba(249, 115, 22, 0.25);
+    transform: translateY(-0.5px);
+  }
+}
