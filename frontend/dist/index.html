@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/icone-aria.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a1715" />
+    <!-- Applique le thème mémorisé avant le premier rendu (évite un flash) -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("aria-theme");
+          /* Thème par défaut : mode clair (sauf choix explicite "dark") */
+          var isLight = stored !== "dark";
+          if (isLight) document.documentElement.classList.add("light");
+          document.documentElement.style.colorScheme = isLight ? "light" : "dark";
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute("content", isLight ? "#f7f5f2" : "#1a1715");
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="robots" content="index, follow" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>ARIA — Accompagnement digital à Madagascar | Développement, Design, Marketing & IA</title>
+    <meta
+      name="description"
+      content="ARIA — Accompagnement Digital. Agence digitale à Madagascar : développement web & mobile, branding, marketing digital et solutions IA. Vos idées, nos résultats."
+    />
+    <meta name="author" content="ARIA" />
+    <link rel="canonical" href="https://www.aria-mg.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="ARIA" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content="ARIA — Accompagnement Digital" />
+    <meta
+      property="og:description"
+      content="Le digital qui fait avancer votre entreprise. Sites web, applications, branding, marketing digital et automatisation par ARIA."
+    />
+    <meta property="og:url" content="https://www.aria-mg.com/" />
+    <meta property="og:image" content="https://www.aria-mg.com/og.png" />
+    <meta property="og:image" content="https://www.aria-mg.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ARIA — Le digital qui fait avancer votre entreprise" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ARIA — Accompagnement Digital" />
+    <meta
+      name="twitter:description"
+      content="Le digital qui fait avancer votre entreprise. Sites web, applications, branding, marketing digital et automatisation par ARIA."
+    />
+    <meta name="twitter:image" content="https://www.aria-mg.com/og-aria.jpg" />
+
+    <!-- Typographie : Lato, une police humaniste et lisible sur tout le site -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ARIA",
+        "alternateName": "ARIA - Accompagnement Digital",
+        "url": "https://www.aria-mg.com/",
+        "description": "Agence digitale — Développement web, branding, marketing & solutions IA.",
+        "areaServed": "Worldwide",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Antsirabe",
+          "addressCountry": "MG"
+        }
+      }
+    </script>
+    <script type="module" crossorigin src="/assets/index-DNkOGY-M.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-B5GWV6kA.js">
+    <link rel="modulepreload" crossorigin href="/assets/icons-N7oC_Rxn.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-iIlFq1oU.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

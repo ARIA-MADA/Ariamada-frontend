@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/* ============================================================
+   Enums
+   ============================================================ */
+
+enum UserRole {
+  ADMIN
+  EDITOR
+}
+
+enum ProjectStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum MessageStatus {
+  NEW
+  READ
+  HANDLED
+}
+
+enum QuoteStatus {
+  NEW
+  CONTACTED
+  PROPOSAL_SENT
+  CLOSED
+}
+
+/* ============================================================
+   Admin
+   ============================================================ */
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String // bcrypt (12 rounds)
+  name      String?
+  role      UserRole @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+/* ============================================================
+   Réalisations / projets
+   ============================================================ */
+
+model Project {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           String
+  description     String
+  fullDescription String?
+  objective       String?
+  client          String?
+  duration        String?
+  status          ProjectStatus @default(PENDING)
+  url             String?
+  technologies    String[]      @default([])
+  goals           String[]      @default([])
+  solutions       String[]      @default([])
+  caseStudyExcerpt    String?
+  caseStudyChallenge  String?
+  caseStudyApproach   String?
+  caseStudyResults    String[]      @default([])
+  caseStudyServices   String[]      @default([])
+  image           String?
+  published       Boolean       @default(false)
+  order           Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([published, order])
+  @@map("projects")
+}
+
+/* Anciennes études conservées le temps de la migration des données vers Project. */
+model CaseStudy {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  title      String
+  excerpt    String   @default("")
+  challenge  String   @default("")
+  approach   String   @default("")
+  results    String[] @default([])
+  services   String[] @default([])
+  image      String?
+  published  Boolean  @default(false)
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([published, order])
+  @@map("case_studies")
+}
+
+/* ============================================================
+   Messages de contact
+   ============================================================ */
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  name      String
+  company   String?
+  email     String
+  country   String?
+  phone     String?
+  message   String
+  status    MessageStatus @default(NEW)
+  createdAt DateTime      @default(now())
+
+  @@index([status, createdAt])
+  @@map("contact_messages")
+}
+
+/* ============================================================
+   Demandes de devis
+   ============================================================ */
+
+model QuoteRequest {
+  id                String      @id @default(cuid())
+  service           String
+  projectDescription String?
+  teamSize          String?
+  languages         String?
+  name              String
+  company           String?
+  email             String
+  country           String?
+  phone             String?
+  message           String?
+  status            QuoteStatus @default(NEW)
+  createdAt         DateTime    @default(now())
+
+  @@index([status, createdAt])
+  @@map("quote_requests")
+}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+
+model Faq {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String?
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, order])
+  @@map("faqs")
+}
+
+/* ============================================================
+   Base de connaissances du chatbot (éditable par l'admin)
+   ============================================================ */
+
+model Knowledge {
+  id        String   @id @default(cuid())
+  category  String   @default("services")
+  question  String
+  answer    String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, category])
+  @@map("knowledge")
+}

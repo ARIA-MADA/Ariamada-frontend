@@ -1,0 +1,26 @@
+{
+  "name": "aria-refonte",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Refonte du site officiel ARIA - Accompagnement Digital",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:backend dev:frontend",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend",
+    "build": "npm run db:generate -w backend && npm run build -w frontend && npm run build -w backend",
+    "db:migrate": "npm run db:migrate -w backend",
+    "db:seed": "npm run db:seed -w backend",
+    "db:seed:showcase": "npm run db:seed:showcase -w backend",
+    "lint": "npm run lint -w frontend"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
