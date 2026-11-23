@@ -2,7 +2,6 @@ import { Router } from "express";
 import multer from "multer";
 import path from "node:path";
 import fs from "node:fs";
-import { fileURLToPath } from "node:url";
 import { randomBytes } from "node:crypto";
 import { del as deleteBlob, put } from "@vercel/blob";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
@@ -12,7 +11,7 @@ import { requireAuth } from "../middleware/auth.js";
 /* ------------------------------------------------------------
    Stockage d'images : local en développement, Vercel Blob en production.
    ------------------------------------------------------------ */
-const HERE = path.dirname(fileURLToPath(import.meta.url)); // src/routes
+const HERE = path.resolve(process.cwd(), "src", "routes"); // src/routes
 export const UPLOADS_ROOT = path.resolve(HERE, "..", "..", "uploads"); // backend/uploads
 
 if (!config.isVercel) fs.mkdirSync(UPLOADS_ROOT, { recursive: true });
