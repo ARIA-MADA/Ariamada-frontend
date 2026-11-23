@@ -4,6 +4,7 @@
     "backend": {
       "root": "backend",
       "framework": "express",
+      "entrypoint": "src/app.ts",
       "buildCommand": "npm run db:generate && npm run build"
     },
     "frontend": {
