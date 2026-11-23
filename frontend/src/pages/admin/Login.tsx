@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Loader2, Lock, Mail, ShieldAlert } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Loader2, Lock, Mail, ShieldAlert } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { PageTitle, PageShell } from "@/components/layout/PageShell";
 import ThemeToggle from "@/components/layout/ThemeToggle";
@@ -11,6 +11,7 @@ export default function AdminLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -81,14 +82,23 @@ export default function AdminLogin() {
                   />
                   <input
                     id="password"
-                    type="password"
+                    type={passwordVisible ? "text" : "password"}
                     required
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="field pl-10!"
+                    className="field pl-10! pr-12!"
                     placeholder="••••••••"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setPasswordVisible((visible) => !visible)}
+                    className="absolute right-2 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-lg text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    aria-label={passwordVisible ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                    aria-pressed={passwordVisible}
+                  >
+                    {passwordVisible ? <EyeOff className="size-4" aria-hidden /> : <Eye className="size-4" aria-hidden />}
+                  </button>
                 </div>
               </div>
 
