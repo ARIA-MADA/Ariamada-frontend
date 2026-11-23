@@ -1,4 +1,4 @@
-import{u as g,A as r,t as h,j as e,P as b,a as j,E as A,S as y}from"./index-DNkOGY-M.js";import{r as d,L}from"./vendor-B5GWV6kA.js";import"./icons-N7oC_Rxn.js";const w={mentions:{titleKey:"footer.mentions",eyebrow:"Légal",sections:[{h:"Éditeur du site",p:`ARIA — Accompagnement Digital
+import{u as g,A as r,t as h,j as e,P as b,a as j,E as A,S as y}from"./index-KOMq4CER.js";import{r as d,L}from"./vendor-B5GWV6kA.js";import"./icons-N7oC_Rxn.js";const w={mentions:{titleKey:"footer.mentions",eyebrow:"Légal",sections:[{h:"Éditeur du site",p:`ARIA — Accompagnement Digital
 Site : https://www.aria-mg.com/
 Email : ${r.email}
 Téléphone : ${r.phones.join(" · ")}
