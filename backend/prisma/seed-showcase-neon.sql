@@ -294,6 +294,165 @@ VALUES
   CURRENT_TIMESTAMP
 ),
 (
+  'showcase-sophie-jacquet-audebert-psychologue',
+  'sophie-jacquet-audebert-psychologue',
+  'Sophie Jacquet-Audebert — Psychologue',
+  'Site professionnel de Sophie Jacquet-Audebert, psychologue clinicienne à Paris 10e, présentant son parcours, ses pratiques et les modalités de consultation.',
+  'Le site présente l''approche intégrative de la psychologue, son parcours et ses outils d''accompagnement : psychologie clinique, approche transgénérationnelle, mémoire cellulaire et art-thérapie. Les patients peuvent s''informer sur les consultations individuelles au cabinet, rue du Faubourg Saint-Denis à Paris, ou à distance en visioconférence.',
+  'Présenter le parcours et les pratiques de la psychologue, et aider les patients à découvrir les modalités de consultation et à prendre contact.',
+  'Sophie Jacquet-Audebert',
+  NULL,
+  'COMPLETED',
+  'https://sophie-jacquet-audebert.vercel.app/',
+  ARRAY[]::TEXT[],
+  ARRAY[
+    'Présenter la psychologue et son approche clinique',
+    'Expliquer les différentes pratiques proposées',
+    'Informer sur les consultations au cabinet et à distance',
+    'Faciliter la prise de contact et les demandes de rendez-vous'
+  ]::TEXT[],
+  ARRAY[
+    'Création d''un site professionnel organisé autour de l''accueil, des pratiques, du parcours et du contact',
+    'Présentation détaillée de la psychologie clinique, du transgénérationnel, de la mémoire cellulaire et de l''art-thérapie',
+    'Mise en évidence des modalités de consultation à Paris et en visioconférence'
+  ]::TEXT[],
+  'Un site professionnel pour découvrir l''approche, le parcours et les modalités de consultation de Sophie Jacquet-Audebert.',
+  'Rendre accessibles des pratiques thérapeutiques complémentaires et permettre aux patients de comprendre les possibilités de consultation avant de prendre contact.',
+  'Le parcours du site articule une présentation de la psychologue, des pages consacrées à ses outils d''accompagnement, des informations pratiques et des moyens de contact.',
+  ARRAY[
+    'Présentation claire du parcours et de l''approche de la psychologue',
+    'Informations sur quatre pratiques d''accompagnement',
+    'Présentation des consultations au cabinet et en visioconférence'
+  ]::TEXT[],
+  ARRAY['Site vitrine', 'Présence digitale']::TEXT[],
+  NULL,
+  TRUE,
+  15,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+),
+(
+  'showcase-allie-jc-multiservices-habitat',
+  'allie-jc-multiservices-habitat',
+  'L''Allié JC — Multiservices Habitat',
+  'Site professionnel de L''Allié JC, entreprise de multiservices proposant l''entretien des espaces verts, le nettoyage et les petits travaux dans le Doubs et le Jura.',
+  'Le site présente les services de Jean Charles Biernat, entrepreneur individuel basé à La Rivière-Drugeon : entretien de jardins et terrasses, nettoyage haute pression, nettoyage de vitres et d''intérieurs, remises en état de fin de bail ou de chantier, nettoyage de locaux et petits bricolages. Il s''adresse aux particuliers, copropriétés et professionnels, et propose une demande de devis avec estimation en ligne.',
+  'Présenter les prestations de l''entreprise et permettre aux particuliers et professionnels de demander facilement un devis dans sa zone d''intervention.',
+  'L''Allié JC',
+  NULL,
+  'COMPLETED',
+  'https://alli-jc-eta.vercel.app/',
+  ARRAY[]::TEXT[],
+  ARRAY[
+    'Présenter les services d''entretien, de nettoyage et de petit bricolage',
+    'Informer sur les prestations pour particuliers, copropriétés et professionnels',
+    'Faciliter les demandes de devis et la prise de contact',
+    'Préciser la zone d''intervention dans le Doubs et le Jura'
+  ]::TEXT[],
+  ARRAY[
+    'Création d''un site vitrine organisé par catégories de services',
+    'Présentation des prestations d''espaces verts, de nettoyage et de remise en état',
+    'Ajout d''un simulateur de devis et d''un formulaire de demande',
+    'Mise en avant des coordonnées et de la zone géographique desservie'
+  ]::TEXT[],
+  'Un site de présentation et de demande de devis pour une entreprise locale de multiservices habitat dans le Haut-Doubs et le Jura.',
+  'Présenter une offre de services variée pour plusieurs types de clients tout en facilitant l''estimation des besoins et la prise de contact.',
+  'Le site regroupe les prestations par domaine, détaille la zone desservie et propose un simulateur ainsi qu''un formulaire pour qualifier les demandes de devis.',
+  ARRAY[
+    'Présentation des services pour particuliers, copropriétés et professionnels',
+    'Parcours de demande de devis avec simulateur en ligne',
+    'Informations de contact et zone d''intervention facilement accessibles'
+  ]::TEXT[],
+  ARRAY['Site vitrine', 'Simulateur de devis', 'Présence digitale']::TEXT[],
+  NULL,
+  TRUE,
+  16,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+),
+(
+  'showcase-ifaty-beach-club',
+  'ifaty-beach-club',
+  'Ifaty Beach Club',
+  'Site de présentation et de réservation de l''Ifaty Beach Club, hôtel trois étoiles en bord de lagon à Mangily, dans le sud-ouest de Madagascar.',
+  'Le site présente l''hôtel, ses chambres et bungalows, ses équipements et les activités accessibles depuis Ifaty. Les visiteurs peuvent découvrir les hébergements, les deux piscines, le jacuzzi, le restaurant et le bar, ainsi que les activités nautiques et de découverte de la région. Un parcours de demande de disponibilité permet de préparer une réservation, tandis que le site met en avant une démarche de préservation de l''écosystème local.',
+  'Présenter l''hôtel et ses prestations, inspirer les voyageurs et faciliter les demandes de réservation et d''informations.',
+  'Ifaty Beach Club',
+  NULL,
+  'COMPLETED',
+  'https://ifaty-beach-club-frontend.vercel.app/',
+  ARRAY[]::TEXT[],
+  ARRAY[
+    'Présenter les chambres et bungalows selon les besoins des voyageurs',
+    'Mettre en valeur les équipements et services de l''hôtel',
+    'Faire découvrir les activités nautiques et les sites à proximité',
+    'Faciliter les demandes de disponibilité et la prise de contact'
+  ]::TEXT[],
+  ARRAY[
+    'Création d''un site vitrine organisé autour des hébergements, services, activités et informations pratiques',
+    'Présentation des chambres doubles, twin et familiales',
+    'Mise en valeur des piscines, du jacuzzi, du restaurant, du bar et de l''accès à la plage',
+    'Ajout d''un parcours de demande de réservation et d''informations'
+  ]::TEXT[],
+  'Un site hôtelier pour découvrir les hébergements, les services et les activités de l''Ifaty Beach Club face au lagon.',
+  'Présenter une expérience de séjour complète à Ifaty et aider les visiteurs à choisir un hébergement et à organiser leur réservation.',
+  'Le site associe une présentation de l''hôtel à des sections dédiées aux chambres, aux équipements, aux activités et aux excursions, avec des appels à l''action vers la demande de disponibilité.',
+  ARRAY[
+    'Présentation détaillée des catégories de chambres et bungalows',
+    'Informations réunies sur les services, activités et lieux à découvrir',
+    'Parcours de demande de réservation accessible depuis le site'
+  ]::TEXT[],
+  ARRAY['Site hôtelier', 'Présentation des hébergements', 'Réservation en ligne']::TEXT[],
+  NULL,
+  TRUE,
+  17,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+),
+(
+  'showcase-kolo-tv-fm',
+  'kolo-tv-fm',
+  'KOLO TV/FM',
+  'Plateforme média de KOLO TV/FM, réunissant télévision en direct, radio et contenus d''information, de culture et de divertissement malgaches.',
+  'Le site rassemble les deux antennes KOLO TV et KOLO FM dans une expérience numérique commune. Les visiteurs peuvent regarder la chaîne en direct, écouter la radio, retrouver les journaux Ny Vaovao, consulter les replays et découvrir des émissions consacrées à la culture, au sport, à l''actualité, à l''économie et à la musique malgache.',
+  'Rendre les programmes de KOLO TV et KOLO FM accessibles en ligne et valoriser les contenus d''information et de culture malgaches.',
+  'KOLO TV/FM',
+  NULL,
+  'COMPLETED',
+  'https://kolo-tv-frontend.vercel.app/',
+  ARRAY[]::TEXT[],
+  ARRAY[
+    'Réunir les expériences de télévision et de radio en ligne',
+    'Faciliter l''accès aux directs et aux émissions',
+    'Mettre en avant les journaux et les programmes malgaches',
+    'Présenter une programmation variée entre actualité, culture, sport et musique'
+  ]::TEXT[],
+  ARRAY[
+    'Création d''un portail média réunissant les univers KOLO TV et KOLO FM',
+    'Mise en place de points d''accès aux directs TV et radio',
+    'Présentation des journaux, replays et émissions à la une',
+    'Organisation des programmes par antenne et par type de contenu'
+  ]::TEXT[],
+  'Une plateforme de diffusion en ligne qui réunit la télévision et la radio KOLO autour des programmes malgaches.',
+  'Rendre complémentaires et faciles à parcourir les contenus de deux antennes — télévision et radio — tout en donnant de la visibilité aux journaux, magazines et programmes culturels.',
+  'L''interface permet de choisir entre les univers TV et FM, d''accéder au direct et de parcourir les programmes et replays mis en avant.',
+  ARRAY[
+    'Accès regroupé aux directs de KOLO TV et KOLO FM',
+    'Mise en avant des éditions du journal Ny Vaovao et des replays',
+    'Navigation par antenne et découverte de contenus d''actualité, de culture, de sport et de musique'
+  ]::TEXT[],
+  ARRAY[
+    'Plateforme média',
+    'Diffusion TV et radio en ligne',
+    'Présence digitale'
+  ]::TEXT[],
+  NULL,
+  TRUE,
+  18,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+),
+(
   'showcase-agrisat-cartographie-agricole-madagascar',
   'agrisat-cartographie-agricole-madagascar',
   'AGRISAT — Cartographie et suivi des parcelles d''orge par satellite',
