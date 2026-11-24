@@ -3,9 +3,14 @@ import { config } from "../config.js";
 import { prisma } from "../prisma.js";
 
 const CACHE_LIMIT = 2_000;
+const TRANSLATION_TTL_MS = 30 * 24 * 60 * 60 * 1_000;
+const CLEANUP_INTERVAL_MS = 24 * 60 * 60 * 1_000;
+const DATABASE_TOUCH_INTERVAL_MS = 24 * 60 * 60 * 1_000;
 const CACHE = new Map<string, string>();
 const IN_FLIGHT = new Map<string, Promise<string>>();
 let translationQueue: Promise<void> = Promise.resolve();
+let lastCleanupAt = 0;
+let cleanupInFlight: Promise<void> | null = null;
 
 function cacheKey(text: string, locale: string): string {
   return createHash("sha256")
@@ -35,6 +40,32 @@ function parseTranslation(content: string, expected: number): string[] {
     throw new Error("La traduction ne correspond pas aux textes envoyés");
   }
   return result;
+}
+
+async function cleanupExpiredTranslations(): Promise<void> {
+  if (Date.now() - lastCleanupAt < CLEANUP_INTERVAL_MS) return;
+  if (cleanupInFlight) return cleanupInFlight;
+
+  cleanupInFlight = prisma.translationCache
+    .deleteMany({
+      where: {
+        updatedAt: { lt: new Date(Date.now() - TRANSLATION_TTL_MS) },
+      },
+    })
+    .then(({ count }) => {
+      lastCleanupAt = Date.now();
+      if (count > 0) {
+        console.info(`[translation] ${count} traduction(s) expirée(s) supprimée(s)`);
+      }
+    })
+    .catch((error: unknown) => {
+      console.error("[translation] Échec du nettoyage des traductions expirées", error);
+    })
+    .finally(() => {
+      cleanupInFlight = null;
+    });
+
+  return cleanupInFlight;
 }
 
 async function translateChunk(texts: string[], locale: string): Promise<string[]> {
@@ -91,26 +122,41 @@ export async function translateTexts(
   const missing: { text: string; key: string }[] = [];
 
   if (persist) {
-    const uncached = [...new Set(texts)].filter((text) => !CACHE.has(cacheKey(text, locale)));
-    if (uncached.length > 0) {
-      const hashes = uncached.map((text) => cacheKey(text, locale));
+    const uniqueTexts = [...new Set(texts)];
+    if (uniqueTexts.length > 0) {
+      const hashes = uniqueTexts.map((text) => cacheKey(text, locale));
       const rows = await prisma.translationCache.findMany({
         where: {
           locale,
           model: config.groq.model,
           sourceHash: { in: hashes },
         },
-        select: { sourceHash: true, sourceText: true, translatedText: true },
+        select: { sourceHash: true, sourceText: true, translatedText: true, updatedAt: true },
       });
       const byHash = new Map(rows.map((row) => [row.sourceHash, row]));
-      for (const text of uncached) {
+      const refreshBefore = new Date(Date.now() - DATABASE_TOUCH_INTERVAL_MS);
+      const hashesToTouch: string[] = [];
+      for (const text of uniqueTexts) {
         const key = cacheKey(text, locale);
         const row = byHash.get(key);
         if (row && row.sourceText === text) {
           remember(key, row.translatedText);
+          if (row.updatedAt < refreshBefore) hashesToTouch.push(key);
         }
       }
+      if (hashesToTouch.length > 0) {
+        await prisma.translationCache.updateMany({
+          where: {
+            locale,
+            model: config.groq.model,
+            sourceHash: { in: hashesToTouch },
+            updatedAt: { lt: refreshBefore },
+          },
+          data: { updatedAt: new Date() },
+        });
+      }
     }
+    await cleanupExpiredTranslations();
   }
 
   for (const text of new Set(texts)) {

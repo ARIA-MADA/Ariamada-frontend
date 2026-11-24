@@ -71,7 +71,7 @@ créer de doublons. Exécutez `npm run db:seed:showcase` après avoir configuré
 ## Sécurité
 
 - Clé Groq **jamais** dans le bundle : elle est définie dans les variables d'environnement serveur.
-- La traduction automatique des contenus publics réutilise `GROQ_API_KEY`. Les traductions générées sont partagées entre visiteurs dans `translation_cache`, et mises en cache dans le navigateur. Une empreinte du texte source, de la langue et du modèle évite de réutiliser une traduction après modification du contenu ou changement de modèle. Les messages du chatbot ne sont pas persistés dans ce cache ; les textes juridiques doivent être relus avant publication.
+- La traduction automatique des contenus publics réutilise `GROQ_API_KEY`. Les traductions générées sont partagées entre visiteurs dans `translation_cache`, et mises en cache dans le navigateur. Une empreinte du texte source, de la langue et du modèle évite de réutiliser une traduction après modification du contenu ou changement de modèle. Les traductions inutilisées depuis 30 jours sont supprimées automatiquement lors des demandes de traduction ; une traduction réutilisée voit sa période d'expiration prolongée. Les messages du chatbot ne sont pas persistés dans ce cache ; les textes juridiques doivent être relus avant publication.
 - Auth par **cookie httpOnly** (`aria_token`) + JWT signé, mots de passe bcrypt (12 rounds).
 - Rate limiting : global 600/15 min, formulaires & chat 20/15 min, login 10/15 min.
 - Sur Vercel, ces compteurs mémoire sont propres à chaque instance serverless ; configurez un store distribué ou le pare-feu Vercel pour une limite partagée entre instances.
