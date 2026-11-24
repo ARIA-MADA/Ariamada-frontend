@@ -57,7 +57,7 @@ export const SHOWCASE_PROJECTS: ProjectPreview[] = [
     description:
       "Site web d'un hôtel de charme à Morondava présentant ses chambres, son restaurant, sa piscine et ses massages.",
     client: "Le Vezo Beach",
-    url: "https://hotel-vezo-beach-morondava.vercel.app/",
+    url: "https://www.hotel-vezobeach.com//",
     image: "/images/realisations/vezo-beach-morondava.png",
     technologies: [],
     caseStudyServices: ["Site vitrine", "Présence digitale"],
@@ -213,7 +213,7 @@ export const SHOWCASE_PROJECTS: ProjectPreview[] = [
     description:
       "Site professionnel de L'Allié JC, entreprise de multiservices proposant l'entretien des espaces verts, le nettoyage et les petits travaux dans le Doubs et le Jura.",
     client: "L'Allié JC",
-    url: "https://alli-jc-eta.vercel.app/",
+    url: " https://www.lalliejc.fr/",
     image: null,
     technologies: [],
     caseStudyServices: ["Site vitrine", "Simulateur de devis", "Présence digitale"],

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   BarChart3,
@@ -20,6 +20,8 @@ import {
   Activity,
   ChevronRight,
   SunMoon,
+  Search,
+  X,
 } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { PageTitle, PageShell } from "@/components/layout/PageShell";
@@ -241,6 +243,52 @@ function DonutChart({ total, active, label, color }: { total: number; active: nu
   return <div className="flex items-center gap-3"><div className="relative grid size-[76px] place-items-center"><svg viewBox="0 0 76 76" className="size-[76px] -rotate-90" aria-label={`${active} nouveaux ${label.toLowerCase()} sur ${total}`}><circle cx="38" cy="38" r="30" fill="none" stroke="#eef0f2" strokeWidth="8"/><circle cx="38" cy="38" r="30" fill="none" stroke={color} strokeWidth="8" strokeLinecap="round" strokeDasharray={`${dash} ${circumference}`} /></svg><span className="absolute text-sm font-bold text-[#303740]">{total}</span></div><div><p className="text-xs font-semibold text-[#59626d]">{label}</p><p className="mt-1 text-[11px] text-[#929aa3]">{active} nouveau{active > 1 ? "x" : ""}</p></div></div>;
 }
 
+function normalizeProjectSearch(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function scoreProjectSearch(project: Project, query: string, terms: string[]) {
+  const statusLabel =
+    project.status === "COMPLETED"
+      ? "termine completed"
+      : project.status === "IN_PROGRESS"
+        ? "en cours in progress"
+        : "en attente pending";
+  const fields: { value: string; weight: number }[] = [
+    { value: project.title, weight: 100 },
+    { value: project.client ?? "", weight: 85 },
+    { value: project.slug, weight: 75 },
+    { value: project.url ?? "", weight: 65 },
+    { value: project.caseStudyServices.join(" "), weight: 60 },
+    { value: project.technologies.join(" "), weight: 55 },
+    { value: `${statusLabel} ${project.published ? "publie en ligne published live" : "brouillon non publie draft"}`, weight: 45 },
+    { value: project.description, weight: 35 },
+    { value: project.fullDescription ?? "", weight: 30 },
+    { value: project.objective ?? "", weight: 25 },
+    { value: `${project.goals.join(" ")} ${project.solutions.join(" ")}`, weight: 20 },
+    { value: project.caseStudyExcerpt ?? "", weight: 15 },
+  ].map((field) => ({ ...field, value: normalizeProjectSearch(field.value) }));
+
+  const scores = terms.map((term) => {
+    let bestScore = 0;
+    for (const field of fields) {
+      if (!field.value.includes(term)) continue;
+      const exactFieldMatch = field.value === term ? 15 : 0;
+      const startsFieldMatch = field.value.startsWith(term) ? 5 : 0;
+      bestScore = Math.max(bestScore, field.weight + exactFieldMatch + startsFieldMatch);
+    }
+    return bestScore;
+  });
+
+  if (scores.some((score) => score === 0)) return null;
+  const phraseMatch = fields.some((field) => field.value.includes(query));
+  return scores.reduce((total, score) => total + score, phraseMatch ? 25 : 0);
+}
+
 /* ============================================================
    Projets / Réalisations
    ============================================================ */
@@ -248,6 +296,7 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
   const { t } = useI18n();
   const [searchParams, setSearchParams] = useSearchParams();
   const [items, setItems] = useState<Project[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<Project | null>(null);
@@ -278,6 +327,18 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
     order: "0",
     image: "",
   });
+
+  const filteredItems = useMemo(() => {
+    const query = normalizeProjectSearch(searchQuery);
+    if (!query) return items;
+
+    const terms = query.split(/\s+/);
+    return items
+      .map((project) => ({ project, score: scoreProjectSearch(project, query, terms) }))
+      .filter((result) => result.score !== null)
+      .sort((a, b) => b.score! - a.score!)
+      .map(({ project }) => project);
+  }, [items, searchQuery]);
 
   useEffect(() => {
     if (!imageFile) {
@@ -478,6 +539,34 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
           <RefreshCw className="size-4" aria-hidden />
           Actualiser
         </button>
+      </div>
+      <div className="mb-5">
+        <label className="relative block">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#929aa3]" aria-hidden />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder={t("admin.projects.searchPlaceholder")}
+            aria-label={t("admin.projects.searchPlaceholder")}
+            className="min-h-12 w-full rounded-xl border border-[#e6e8eb] bg-white py-3 pl-10 pr-11 text-sm text-[#20252b] outline-none transition placeholder:text-[#9aa1aa] focus:border-[#f97316] focus:ring-2 focus:ring-[#f97316]/15"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              aria-label={t("admin.projects.searchClear")}
+              className="absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg text-[#737c87] transition hover:bg-[#f4f5f6] hover:text-[#20252b]"
+            >
+              <X className="size-4" aria-hidden />
+            </button>
+          )}
+        </label>
+        {searchQuery.trim() && !loading && items.length > 0 && (
+          <p className="mt-2 text-xs text-[#89919b]" aria-live="polite">
+            {t("admin.projects.searchCount").replace("{count}", String(filteredItems.length))}
+          </p>
+        )}
       </div>
 
       {(creating || editing) && (
@@ -697,9 +786,16 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
         <Panel>Chargement…</Panel>
       ) : items.length === 0 ? (
         <Panel>Aucun projet pour le moment.</Panel>
+      ) : filteredItems.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-[#dfe3e7] bg-white px-5 py-10 text-center">
+          <p className="text-sm font-medium text-[#59626d]">{t("admin.projects.searchNoResults")}</p>
+          <button type="button" onClick={() => setSearchQuery("")} className="mt-3 text-sm font-semibold text-[#d85d10] hover:underline">
+            {t("admin.projects.searchClear")}
+          </button>
+        </div>
       ) : (
         <ul className="space-y-3">
-          {items.map((p) => (
+          {filteredItems.map((p) => (
             <li key={p.id} role="button" tabIndex={0} aria-label={`Ouvrir le détail de ${p.title}`} onClick={(event) => activateCard(event, () => onOpenDetail(p.id))} onKeyDown={(event) => activateCardKey(event, () => onOpenDetail(p.id))} className="card-glass flex cursor-pointer flex-col items-stretch gap-3 rounded-2xl p-3 transition hover:border-[#f97316]/40 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f97316] sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-4">
               <div className="flex min-w-0 items-center gap-3 sm:flex-1 sm:gap-4">
                 {p.image ? <ProjectImage src={p.image} alt="" className="size-[72px] shrink-0 rounded-xl border border-line bg-surface-2 object-cover sm:size-16" /> : <div className="grid size-[72px] shrink-0 place-items-center rounded-xl border border-line bg-surface-2 text-blue sm:size-16"><FolderKanban className="size-6" aria-hidden /></div>}
