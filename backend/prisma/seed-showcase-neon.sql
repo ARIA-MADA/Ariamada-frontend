@@ -527,5 +527,38 @@ VALUES
   19,
   CURRENT_TIMESTAMP,
   CURRENT_TIMESTAMP
+),
+(
+  'showcase-le-sixth',
+  'le-sixth',
+  'Le Sixth — Bistro Français',
+  'Site vitrine pour un bistrot français du West Village à New York, mettant en avant sa cuisine de saison et l’expérience du restaurant.',
+  'Le site de Le Sixth présente son bistrot français situé au 359 6th Avenue, dans le West Village à New York. Il met en valeur sa cuisine française de saison, son chef Philippe Orrico, ainsi que les espaces de restauration et les informations pratiques du restaurant.',
+  'Présenter le restaurant, sa cuisine et ses informations pratiques dans une expérience web soignée.',
+  'Le Sixth',
+  NULL,
+  'COMPLETED',
+  'https://lesixth.com/',
+  ARRAY['WordPress', 'Elementor']::TEXT[],
+  ARRAY[
+    'Présenter l’identité du bistrot et la cuisine du chef',
+    'Mettre en valeur les plats et les espaces du restaurant',
+    'Rendre accessibles les informations pratiques du restaurant'
+  ]::TEXT[],
+  ARRAY[
+    'Conception d’un site vitrine pour le restaurant',
+    'Mise en avant des visuels, de la cuisine et du chef',
+    'Présentation de l’emplacement et des options de restauration'
+  ]::TEXT[],
+  'Un site vitrine pour faire découvrir Le Sixth, bistrot français du West Village, et son approche de la cuisine française.',
+  NULL,
+  NULL,
+  ARRAY[]::TEXT[],
+  ARRAY['Site vitrine', 'WordPress', 'Présence digitale']::TEXT[],
+  'https://lesixth.com/wp-content/uploads/2026/03/pexels-minchephoto-6880221.jpg',
+  TRUE,
+  20,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
 )
 ON CONFLICT DO NOTHING;

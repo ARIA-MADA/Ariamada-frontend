@@ -760,6 +760,36 @@ const projects = [
     published: true,
     order: 19,
   },
+  {
+    slug: "le-sixth",
+    title: "Le Sixth — Bistro Français",
+    description:
+      "Site vitrine pour un bistrot français du West Village à New York, mettant en avant sa cuisine de saison et l’expérience du restaurant.",
+    fullDescription:
+      "Le site de Le Sixth présente son bistrot français situé au 359 6th Avenue, dans le West Village à New York. Il met en valeur sa cuisine française de saison, son chef Philippe Orrico, ainsi que les espaces de restauration et les informations pratiques du restaurant.",
+    objective:
+      "Présenter le restaurant, sa cuisine et ses informations pratiques dans une expérience web soignée.",
+    client: "Le Sixth",
+    status: "COMPLETED",
+    url: "https://lesixth.com/",
+    image: "https://lesixth.com/wp-content/uploads/2026/03/pexels-minchephoto-6880221.jpg",
+    technologies: ["WordPress", "Elementor"],
+    goals: [
+      "Présenter l’identité du bistrot et la cuisine du chef",
+      "Mettre en valeur les plats et les espaces du restaurant",
+      "Rendre accessibles les informations pratiques du restaurant",
+    ],
+    solutions: [
+      "Conception d’un site vitrine pour le restaurant",
+      "Mise en avant des visuels, de la cuisine et du chef",
+      "Présentation de l’emplacement et des options de restauration",
+    ],
+    caseStudyExcerpt:
+      "Un site vitrine pour faire découvrir Le Sixth, bistrot français du West Village, et son approche de la cuisine française.",
+    caseStudyServices: ["Site vitrine", "WordPress", "Présence digitale"],
+    published: true,
+    order: 20,
+  },
 ] satisfies Prisma.ProjectCreateManyInput[];
 
 async function main() {
