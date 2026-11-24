@@ -726,6 +726,40 @@ const projects = [
     published: true,
     order: 1,
   },
+  {
+    slug: "heroescrm",
+    title: "HeroesCRM",
+    description:
+      "Application CRM web pour centraliser la gestion de projets et le suivi des prospects associés.",
+    fullDescription:
+      "HeroesCRM est une application de gestion de la relation client qui organise les prospects par projet. Elle permet de consulter et gérer les prospects, de suivre leur historique et de centraliser les opérations liées aux projets dans une interface web.",
+    objective:
+      "Centraliser le suivi des prospects et des projets dans un outil accessible aux équipes.",
+    client: "HeroesCRM",
+    status: "COMPLETED",
+    url: "https://heroescrm.io/",
+    image: null,
+    technologies: [],
+    goals: [
+      "Regrouper les prospects au sein des projets concernés",
+      "Faciliter le suivi et la consultation de l'historique des prospects",
+      "Centraliser la gestion de la relation client dans une interface web",
+    ],
+    solutions: [
+      "Développement d'une application CRM accessible depuis le navigateur",
+      "Organisation des prospects par projet",
+      "Mise à disposition d'un historique de suivi pour chaque prospect",
+    ],
+    caseStudyExcerpt:
+      "Une application CRM web pour organiser les prospects par projet et suivre leur historique.",
+    caseStudyServices: [
+      "Application web",
+      "CRM",
+      "Gestion des prospects",
+    ],
+    published: true,
+    order: 19,
+  },
 ] satisfies Prisma.ProjectCreateManyInput[];
 
 async function main() {

@@ -258,4 +258,16 @@ export const SHOWCASE_PROJECTS: ProjectPreview[] = [
       "Cartographie SIG et visualisation de données",
     ],
   },
+  {
+    id: "local-heroescrm",
+    slug: "heroescrm",
+    title: "HeroesCRM",
+    description:
+      "Application CRM web pour centraliser la gestion de projets et le suivi des prospects associés.",
+    client: "HeroesCRM",
+    url: "https://heroescrm.io/",
+    image: null,
+    technologies: [],
+    caseStudyServices: ["Application web", "CRM", "Gestion des prospects"],
+  },
 ];

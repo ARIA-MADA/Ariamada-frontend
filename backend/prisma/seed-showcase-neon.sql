@@ -494,5 +494,38 @@ VALUES
   1,
   CURRENT_TIMESTAMP,
   CURRENT_TIMESTAMP
+),
+(
+  'showcase-heroescrm',
+  'heroescrm',
+  'HeroesCRM',
+  'Application CRM web pour centraliser la gestion de projets et le suivi des prospects associés.',
+  'HeroesCRM est une application de gestion de la relation client qui organise les prospects par projet. Elle permet de consulter et gérer les prospects, de suivre leur historique et de centraliser les opérations liées aux projets dans une interface web.',
+  'Centraliser le suivi des prospects et des projets dans un outil accessible aux équipes.',
+  'HeroesCRM',
+  NULL,
+  'COMPLETED',
+  'https://heroescrm.io/',
+  ARRAY[]::TEXT[],
+  ARRAY[
+    'Regrouper les prospects au sein des projets concernés',
+    'Faciliter le suivi et la consultation de l''historique des prospects',
+    'Centraliser la gestion de la relation client dans une interface web'
+  ]::TEXT[],
+  ARRAY[
+    'Développement d''une application CRM accessible depuis le navigateur',
+    'Organisation des prospects par projet',
+    'Mise à disposition d''un historique de suivi pour chaque prospect'
+  ]::TEXT[],
+  'Une application CRM web pour organiser les prospects par projet et suivre leur historique.',
+  NULL,
+  NULL,
+  ARRAY[]::TEXT[],
+  ARRAY['Application web', 'CRM', 'Gestion des prospects']::TEXT[],
+  NULL,
+  TRUE,
+  19,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
 )
 ON CONFLICT DO NOTHING;
