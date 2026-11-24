@@ -541,14 +541,17 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
         </button>
       </div>
       <div className="mb-5">
-        <label className="relative block">
+        <label htmlFor="project-search" className="field-label">
+          Rechercher une réalisation
+        </label>
+        <div className="relative">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#929aa3]" aria-hidden />
           <input
+            id="project-search"
             type="search"
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
             placeholder={t("admin.projects.searchPlaceholder")}
-            aria-label={t("admin.projects.searchPlaceholder")}
             className="min-h-12 w-full rounded-xl border border-[#e6e8eb] bg-white py-3 pl-10 pr-11 text-sm text-[#20252b] outline-none transition placeholder:text-[#9aa1aa] focus:border-[#f97316] focus:ring-2 focus:ring-[#f97316]/15"
           />
           {searchQuery && (
@@ -561,7 +564,7 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
               <X className="size-4" aria-hidden />
             </button>
           )}
-        </label>
+        </div>
         {searchQuery.trim() && !loading && items.length > 0 && (
           <p className="mt-2 text-xs text-[#89919b]" aria-live="polite">
             {t("admin.projects.searchCount").replace("{count}", String(filteredItems.length))}
@@ -573,144 +576,193 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
         <AdminModal title={editing ? "Modifier la réalisation" : "Nouvelle réalisation"} onClose={resetForm}>
         <form onSubmit={save} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <input
-              required
-              aria-label="Titre du projet"
-              placeholder="Titre du projet"
-              value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="field"
-            />
-            <input
-              aria-label="Slug"
-              placeholder="Slug (URL)"
-              value={form.slug}
-              onChange={(e) => setForm({ ...form, slug: e.target.value })}
-              className="field"
-            />
-            <input
-              aria-label="Client"
-              placeholder="Client"
-              value={form.client}
-              onChange={(e) => setForm({ ...form, client: e.target.value })}
-              className="field"
-            />
-            <input
-              aria-label="Durée"
-              placeholder="Durée (ex: 3 mois)"
-              value={form.duration}
-              onChange={(e) => setForm({ ...form, duration: e.target.value })}
-              className="field"
-            />
+            <label htmlFor="project-title" className="field-label">
+              Titre du projet
+              <input
+                id="project-title"
+                required
+                placeholder="Ex. Refonte du site ARIA"
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                className="field"
+              />
+            </label>
+            <label htmlFor="project-slug" className="field-label">
+              Identifiant URL (slug)
+              <input
+                id="project-slug"
+                placeholder="Ex. refonte-site-aria"
+                value={form.slug}
+                onChange={(e) => setForm({ ...form, slug: e.target.value })}
+                className="field"
+              />
+            </label>
+            <label htmlFor="project-client" className="field-label">
+              Client
+              <input
+                id="project-client"
+                placeholder="Nom du client"
+                value={form.client}
+                onChange={(e) => setForm({ ...form, client: e.target.value })}
+                className="field"
+              />
+            </label>
+            <label htmlFor="project-duration" className="field-label">
+              Durée du projet
+              <input
+                id="project-duration"
+                placeholder="Ex. 3 mois"
+                value={form.duration}
+                onChange={(e) => setForm({ ...form, duration: e.target.value })}
+                className="field"
+              />
+            </label>
           </div>
-          <textarea
-            required
-            rows={3}
-            aria-label="Description"
-            placeholder="Description"
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="field resize-y"
-          />
-          <textarea
-            rows={4}
-            aria-label="Description complète"
-            placeholder="Description complète (optionnel)"
-            value={form.fullDescription}
-            onChange={(e) => setForm({ ...form, fullDescription: e.target.value })}
-            className="field resize-y"
-          />
+          <label htmlFor="project-description" className="field-label">
+            Description courte
+            <textarea
+              id="project-description"
+              required
+              rows={3}
+              placeholder="Résumé présenté sur la carte de la réalisation"
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              className="field resize-y"
+            />
+          </label>
+          <label htmlFor="project-full-description" className="field-label">
+            Description complète (optionnel)
+            <textarea
+              id="project-full-description"
+              rows={4}
+              placeholder="Détails affichés sur la page du projet"
+              value={form.fullDescription}
+              onChange={(e) => setForm({ ...form, fullDescription: e.target.value })}
+              className="field resize-y"
+            />
+          </label>
           <div className="rounded-xl border border-line bg-surface-1 p-4 sm:p-5">
             <h2 className="font-heading text-base font-bold text-foreground">Étude du projet</h2>
             <p className="mt-1 mb-4 text-xs leading-relaxed text-muted-foreground">
               Ajoutez le contexte, la démarche et les résultats directement à cette réalisation.
             </p>
             <div className="space-y-3">
-              <textarea
-                rows={2}
-                aria-label="Résumé de l’étude"
-                placeholder="Résumé du projet (optionnel)"
-                value={form.caseStudyExcerpt}
-                onChange={(e) => setForm({ ...form, caseStudyExcerpt: e.target.value })}
-                className="field resize-y"
-              />
-              <textarea
-                rows={3}
-                aria-label="Contexte et défi"
-                placeholder="Contexte et défi à relever"
-                value={form.caseStudyChallenge}
-                onChange={(e) => setForm({ ...form, caseStudyChallenge: e.target.value })}
-                className="field resize-y"
-              />
-              <textarea
-                rows={3}
-                aria-label="Approche"
-                placeholder="Approche et démarche"
-                value={form.caseStudyApproach}
-                onChange={(e) => setForm({ ...form, caseStudyApproach: e.target.value })}
-                className="field resize-y"
-              />
+              <label htmlFor="project-case-excerpt" className="field-label">
+                Résumé de l’étude (optionnel)
+                <textarea
+                  id="project-case-excerpt"
+                  rows={2}
+                  placeholder="Synthèse de l’étude de cas"
+                  value={form.caseStudyExcerpt}
+                  onChange={(e) => setForm({ ...form, caseStudyExcerpt: e.target.value })}
+                  className="field resize-y"
+                />
+              </label>
+              <label htmlFor="project-case-challenge" className="field-label">
+                Contexte et défi
+                <textarea
+                  id="project-case-challenge"
+                  rows={3}
+                  placeholder="Contexte initial et défi à relever"
+                  value={form.caseStudyChallenge}
+                  onChange={(e) => setForm({ ...form, caseStudyChallenge: e.target.value })}
+                  className="field resize-y"
+                />
+              </label>
+              <label htmlFor="project-case-approach" className="field-label">
+                Approche et démarche
+                <textarea
+                  id="project-case-approach"
+                  rows={3}
+                  placeholder="Comment le projet a été abordé et réalisé"
+                  value={form.caseStudyApproach}
+                  onChange={(e) => setForm({ ...form, caseStudyApproach: e.target.value })}
+                  className="field resize-y"
+                />
+              </label>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <textarea
-                  rows={3}
-                  aria-label="Résultats"
-                  placeholder="Résultats (un par ligne)"
-                  value={form.caseStudyResults}
-                  onChange={(e) => setForm({ ...form, caseStudyResults: e.target.value })}
-                  className="field resize-y"
-                />
-                <textarea
-                  rows={3}
-                  aria-label="Services réalisés"
-                  placeholder="Services réalisés (un par ligne)"
-                  value={form.caseStudyServices}
-                  onChange={(e) => setForm({ ...form, caseStudyServices: e.target.value })}
-                  className="field resize-y"
-                />
+                <label htmlFor="project-case-results" className="field-label">
+                  Résultats (un par ligne)
+                  <textarea
+                    id="project-case-results"
+                    rows={3}
+                    placeholder="Un résultat par ligne"
+                    value={form.caseStudyResults}
+                    onChange={(e) => setForm({ ...form, caseStudyResults: e.target.value })}
+                    className="field resize-y"
+                  />
+                </label>
+                <label htmlFor="project-case-services" className="field-label">
+                  Services réalisés (un par ligne)
+                  <textarea
+                    id="project-case-services"
+                    rows={3}
+                    placeholder="Un service par ligne"
+                    value={form.caseStudyServices}
+                    onChange={(e) => setForm({ ...form, caseStudyServices: e.target.value })}
+                    className="field resize-y"
+                  />
+                </label>
               </div>
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <input
-              aria-label="Objectif"
-              placeholder="Objectif"
-              value={form.objective}
-              onChange={(e) => setForm({ ...form, objective: e.target.value })}
-              className="field"
-            />
-            <input
-              aria-label="URL du site"
-              placeholder="URL du site (optionnel)"
-              value={form.url}
-              onChange={(e) => setForm({ ...form, url: e.target.value })}
-              className="field"
-            />
+            <label htmlFor="project-objective" className="field-label">
+              Objectif du projet
+              <input
+                id="project-objective"
+                placeholder="Résultat recherché"
+                value={form.objective}
+                onChange={(e) => setForm({ ...form, objective: e.target.value })}
+                className="field"
+              />
+            </label>
+            <label htmlFor="project-url" className="field-label">
+              URL du site (optionnel)
+              <input
+                id="project-url"
+                type="url"
+                placeholder="https://exemple.com"
+                value={form.url}
+                onChange={(e) => setForm({ ...form, url: e.target.value })}
+                className="field"
+              />
+            </label>
           </div>
-          <textarea
-            rows={2}
-            aria-label="Technologies"
-            placeholder={"Technologies (une par ligne)"}
-            value={form.technologies}
-            onChange={(e) => setForm({ ...form, technologies: e.target.value })}
-            className="field resize-y"
-          />
+          <label htmlFor="project-technologies" className="field-label">
+            Technologies (une par ligne)
+            <textarea
+              id="project-technologies"
+              rows={2}
+              placeholder="Ex. React&#10;TypeScript"
+              value={form.technologies}
+              onChange={(e) => setForm({ ...form, technologies: e.target.value })}
+              className="field resize-y"
+            />
+          </label>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <textarea
-              rows={3}
-              aria-label="Objectifs"
-              placeholder="Objectifs (un par ligne)"
-              value={form.goals}
-              onChange={(e) => setForm({ ...form, goals: e.target.value })}
-              className="field resize-y"
-            />
-            <textarea
-              rows={3}
-              aria-label="Solutions"
-              placeholder="Solutions (une par ligne)"
-              value={form.solutions}
-              onChange={(e) => setForm({ ...form, solutions: e.target.value })}
-              className="field resize-y"
-            />
+            <label htmlFor="project-goals" className="field-label">
+              Objectifs (un par ligne)
+              <textarea
+                id="project-goals"
+                rows={3}
+                placeholder="Un objectif par ligne"
+                value={form.goals}
+                onChange={(e) => setForm({ ...form, goals: e.target.value })}
+                className="field resize-y"
+              />
+            </label>
+            <label htmlFor="project-solutions" className="field-label">
+              Solutions apportées (une par ligne)
+              <textarea
+                id="project-solutions"
+                rows={3}
+                placeholder="Une solution par ligne"
+                value={form.solutions}
+                onChange={(e) => setForm({ ...form, solutions: e.target.value })}
+                className="field resize-y"
+              />
+            </label>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <label className="flex flex-col gap-2 text-sm text-muted-foreground">
@@ -822,16 +874,19 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
                 >
                   <Pencil className="size-4 sm:size-3.5" /><span className="sm:hidden">Modifier</span>
                 </button>
-                <select
-                  value={p.status}
-                  onChange={(e) => setStatus(p, e.target.value as Project["status"])}
-                  aria-label={`Statut de ${p.title}`}
-                  className="min-h-10 min-w-0 rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-xs text-foreground sm:min-h-9"
-                >
-                  <option value="PENDING">En attente</option>
-                  <option value="IN_PROGRESS">En cours</option>
-                  <option value="COMPLETED">Terminé</option>
-                </select>
+                <label className="flex flex-col gap-1 text-[10px] font-semibold text-muted-foreground">
+                  Statut
+                  <select
+                    value={p.status}
+                    onChange={(e) => setStatus(p, e.target.value as Project["status"])}
+                    aria-label={`Statut de ${p.title}`}
+                    className="min-h-10 min-w-0 rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-xs text-foreground sm:min-h-9"
+                  >
+                    <option value="PENDING">En attente</option>
+                    <option value="IN_PROGRESS">En cours</option>
+                    <option value="COMPLETED">Terminé</option>
+                  </select>
+                </label>
                 <button
                   type="button"
                   onClick={() => togglePublish(p)}
@@ -1040,17 +1095,20 @@ function QuotesPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void }) {
               )}
             </div>
             <div className="flex shrink-0 flex-col gap-2">
-              <select
-                value={q.status}
-                onChange={(e) => setStatus(q, e.target.value as QuoteRequest["status"])}
-                className="rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-xs text-foreground"
-              >
-                {Object.entries(STATUS_LABEL).map(([k, v]) => (
-                  <option key={k} value={k}>
-                    {v}
-                  </option>
-                ))}
-              </select>
+              <label className="flex flex-col gap-1 text-[10px] font-semibold text-muted-foreground">
+                État du suivi
+                <select
+                  value={q.status}
+                  onChange={(e) => setStatus(q, e.target.value as QuoteRequest["status"])}
+                  className="rounded-lg border border-line bg-surface-1 px-2.5 py-1.5 text-xs text-foreground"
+                >
+                  {Object.entries(STATUS_LABEL).map(([k, v]) => (
+                    <option key={k} value={k}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <button
                 type="button"
                 onClick={() => setDeleteTarget(q)}
@@ -1139,21 +1197,29 @@ function FaqPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void }) {
       {modalOpen && <AdminModal title={editing ? "Modifier la question" : "Ajouter une question"} onClose={() => { setModalOpen(false); setEditing(null); setForm({ question: "", answer: "" }); if (searchParams.has("edit")) setSearchParams({ section: "faq" }, { replace: true }); }}>
       <form onSubmit={save} className="space-y-3">
         <h2 className="font-heading text-base font-bold text-[#252b32]">{editing ? "Modifier la question" : "Ajouter une question"}</h2>
-        <input
-          required
-          placeholder="Question"
-          value={form.question}
-          onChange={(e) => setForm({ ...form, question: e.target.value })}
-          className="field"
-        />
-        <textarea
-          required
-          rows={3}
-          placeholder="Réponse"
-          value={form.answer}
-          onChange={(e) => setForm({ ...form, answer: e.target.value })}
-          className="field resize-y"
-        />
+        <label htmlFor="faq-question" className="field-label">
+          Question
+          <input
+            id="faq-question"
+            required
+            placeholder="Saisissez la question"
+            value={form.question}
+            onChange={(e) => setForm({ ...form, question: e.target.value })}
+            className="field"
+          />
+        </label>
+        <label htmlFor="faq-answer" className="field-label">
+          Réponse
+          <textarea
+            id="faq-answer"
+            required
+            rows={3}
+            placeholder="Saisissez la réponse"
+            value={form.answer}
+            onChange={(e) => setForm({ ...form, answer: e.target.value })}
+            className="field resize-y"
+          />
+        </label>
         <button type="submit" disabled={saving} className="btn-primary disabled:opacity-60">
           {editing ? <Pencil className="size-4" /> : <Plus className="size-4" />} {saving ? "Enregistrement…" : editing ? "Enregistrer" : "Ajouter"}
         </button>
@@ -1284,33 +1350,45 @@ function KnowledgePanel({ onOpenDetail }: { onOpenDetail: (id: string) => void }
       <form onSubmit={save} className="space-y-3">
         <h2 className="font-heading text-base font-bold text-[#252b32]">{editing ? "Modifier l’entrée" : "Ajouter une entrée"}</h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <select
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            className="field"
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          <input
-            required
-            placeholder="Question"
-            value={form.question}
-            onChange={(e) => setForm({ ...form, question: e.target.value })}
-            className="field sm:col-span-2"
-          />
+          <label htmlFor="knowledge-category" className="field-label">
+            Catégorie
+            <select
+              id="knowledge-category"
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+              className="field"
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="knowledge-question" className="field-label sm:col-span-2">
+            Question
+            <input
+              id="knowledge-question"
+              required
+              placeholder="Saisissez la question"
+              value={form.question}
+              onChange={(e) => setForm({ ...form, question: e.target.value })}
+              className="field"
+            />
+          </label>
         </div>
-        <textarea
-          required
-          rows={3}
-          placeholder="Réponse"
-          value={form.answer}
-          onChange={(e) => setForm({ ...form, answer: e.target.value })}
-          className="field resize-y"
-        />
+        <label htmlFor="knowledge-answer" className="field-label">
+          Réponse
+          <textarea
+            id="knowledge-answer"
+            required
+            rows={3}
+            placeholder="Saisissez la réponse"
+            value={form.answer}
+            onChange={(e) => setForm({ ...form, answer: e.target.value })}
+            className="field resize-y"
+          />
+        </label>
         <button type="submit" disabled={saving} className="btn-primary disabled:opacity-60">
           {editing ? <Pencil className="size-4" /> : <Plus className="size-4" />} {saving ? "Enregistrement…" : editing ? "Enregistrer" : "Ajouter"}
         </button>
