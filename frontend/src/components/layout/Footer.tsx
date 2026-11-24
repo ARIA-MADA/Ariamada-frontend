@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useI18n } from "@/i18n";
 import { openCookieSettings } from "@/components/layout/CookieConsent";
+import { useTheme } from "@/lib/theme";
 
 /** Coordonnées ARIA (à synchroniser avec backend/.env si besoin) */
 export const ARIA_CONTACT = {
@@ -35,6 +36,7 @@ const LEGAL_LINKS = [
 
 export default function Footer() {
   const { t } = useI18n();
+  const { theme } = useTheme();
   const year = new Date().getFullYear();
 
   return (
@@ -48,17 +50,17 @@ export default function Footer() {
       <div className="container-site relative border-t border-line pb-6 pt-8 sm:pt-10">
         <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-[1.65fr_0.8fr_0.95fr_1fr] lg:gap-x-12">
           <div className="min-w-0">
-            <Link to="/" className="group mb-4 flex w-fit items-center gap-3">
-              <span className="relative size-14 shrink-0 overflow-hidden rounded-xl shadow-[0_0_22px_rgba(249,115,22,0.35)]">
+            <Link to="/" className="group mb-4 flex w-fit items-center gap-4">
+              <span className={`relative size-24 shrink-0 ${theme === "light" ? "rounded-2xl bg-[#102b37] p-1.5 shadow-[0_4px_14px_rgba(16,43,55,0.2)]" : ""}`}>
                 <img
-                  src="/icone-aria.jpg"
+                  src="/images/aria-logo.png"
                   alt=""
                   aria-hidden="true"
-                  className="absolute left-1/2 top-1/2 h-[195%] w-[195%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover transition-transform group-hover:scale-105"
+                  className="size-full object-contain transition-transform group-hover:scale-105"
                 />
               </span>
               <span className="min-w-0">
-                <span className="block font-heading text-lg font-extrabold leading-tight tracking-tight text-foreground">
+                <span className="block font-heading text-2xl font-extrabold leading-tight tracking-tight text-foreground">
                   ARIA
                 </span>
                 <span className="mt-0.5 block max-w-xs font-mono text-[10px] uppercase leading-relaxed tracking-[0.16em] text-orange-300">

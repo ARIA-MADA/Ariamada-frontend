@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useI18n } from "@/i18n";
+import { useTheme } from "@/lib/theme";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 
 interface NavItem {
@@ -20,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function Header() {
   const { t, locale, setLocale } = useI18n();
+  const { theme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -61,23 +63,23 @@ export default function Header() {
         className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue via-coral to-mint"
         aria-hidden
       />
-      <div className="container-site grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 xl:grid-cols-[auto_minmax(0,1fr)_auto]">
+      <div className="container-site grid h-[5.5rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 xl:grid-cols-[auto_minmax(0,1fr)_auto]">
         {/* Logo */}
         <Link
           to="/"
           aria-label={t("aria.homeLabel")}
           className="group flex min-w-0 items-center gap-2.5"
         >
-          <span className="relative size-11 shrink-0 overflow-hidden rounded-xl">
+          <span className={`relative size-20 shrink-0 ${theme === "light" ? "rounded-2xl bg-[#102b37] p-1 shadow-[0_4px_14px_rgba(16,43,55,0.2)]" : ""}`}>
             <img
-              src="/icone-aria.jpg"
+              src="/images/aria-logo.png"
               alt=""
               aria-hidden="true"
-              className="absolute left-1/2 top-1/2 h-[195%] w-[195%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover transition-transform duration-300 group-hover:scale-105"
+              className="size-full object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </span>
           <span className="min-w-0">
-            <span className="block truncate font-heading text-lg font-extrabold leading-none tracking-tight text-foreground">
+            <span className="block truncate font-heading text-2xl font-extrabold leading-none tracking-tight text-foreground">
               ARIA
             </span>
             <span className="hidden truncate font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground sm:block">
@@ -172,7 +174,7 @@ export default function Header() {
       <div
         ref={mobileMenuRef}
         aria-hidden={!mobileOpen}
-        className={`fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-line bg-background/98 backdrop-blur-xl transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none xl:hidden ${
+        className={`fixed inset-x-0 top-[5.5rem] bottom-0 z-40 overflow-y-auto border-t border-line bg-background/98 backdrop-blur-xl transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none xl:hidden ${
           mobileOpen
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-2 opacity-0 delay-300"
