@@ -8,8 +8,8 @@ import {
 import { useI18n } from "@/i18n";
 import { useTheme } from "@/lib/theme";
 import { PageTitle } from "@/components/layout/PageShell";
-import { projectsApi, translateProjectsContent } from "@/lib/api";
-import type { Project } from "@/types";
+import { projectsApi } from "@/lib/api";
+import { SHOWCASE_PROJECTS, type ProjectPreview } from "@/data/showcaseProjects";
 import Hero from "@/components/home/Hero";
 import {
   Card,
@@ -134,6 +134,32 @@ function shufflePartners<T extends { name: string }>(partners: readonly T[]) {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+}
+
+function pickRandomProjects(
+  projects: ProjectPreview[],
+  previous: ProjectPreview[] = [],
+) {
+  const shuffled = [...projects];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  const selected = shuffled.slice(0, 3);
+  if (
+    projects.length > 3 &&
+    selected.length === previous.length &&
+    selected.every((project) => previous.some((item) => item.id === project.id))
+  ) {
+    const selectedIds = new Set(selected.map((project) => project.id));
+    const alternatives = projects.filter((project) => !selectedIds.has(project.id));
+    const replacement = alternatives[Math.floor(Math.random() * alternatives.length)];
+    const index = Math.floor(Math.random() * selected.length);
+    selected[index] = replacement;
+  }
+
+  return selected;
 }
 
 /* ============================================================
@@ -458,177 +484,105 @@ export default function Home() {
 }
 
 /* ------------------------------------------------------------
-   Aperçu des réalisations (chargé depuis l'API, repli statique)
+   Aperçu aléatoire des réalisations publiées
    ------------------------------------------------------------ */
 function RealisationsPreview() {
   const { t, locale } = useI18n();
-  const [items, setItems] = useState<Project[] | null>(null);
+  const [projects, setProjects] = useState<ProjectPreview[]>(SHOWCASE_PROJECTS);
+  const [visible, setVisible] = useState<ProjectPreview[]>(() =>
+    pickRandomProjects(SHOWCASE_PROJECTS),
+  );
 
   useEffect(() => {
     let cancelled = false;
+
     projectsApi
       .listPublished(locale)
       .then((res) => {
-        if (!cancelled && res.items.length > 0) setItems(res.items.slice(0, 3));
+        if (cancelled) return;
+        const availableProjects = res.items.length > 0 ? res.items : SHOWCASE_PROJECTS;
+        setProjects(availableProjects);
+        setVisible(pickRandomProjects(availableProjects));
       })
-      .catch(() => {
-        /* backend absent → repli statique */
+      .catch((cause: unknown) => {
+        console.error("Erreur lors du chargement des réalisations de la page d'accueil :", cause);
       });
+
     return () => {
       cancelled = true;
     };
   }, [locale]);
 
-  /* Repli si l'API ne répond pas encore */
-  const samples: Project[] = [
-    {
-      id: "s1",
-      slug: "refonte-site-entreprise-services",
-      title: "OnlyClik",
-      description: "Site vitrine pour une agence d'acquisition digitale spécialisée dans la génération de prospects.",
-      fullDescription: null,
-      objective: "Présenter l'offre d'acquisition digitale et faciliter la prise de contact.",
-      client: "OnlyClik",
-      duration: null,
-      status: "COMPLETED",
-      url: "https://www.onlyclik.com/",
-      technologies: [],
-      goals: [],
-      solutions: [],
-      caseStudyExcerpt: null,
-      caseStudyChallenge: null,
-      caseStudyApproach: null,
-      caseStudyResults: [],
-      caseStudyServices: ["Site vitrine", "Présence digitale"],
-      image: "/images/realisations/onlyclik.png",
-      published: true,
-      order: 0,
-      createdAt: "",
-      updatedAt: "",
-    },
-    {
-      id: "s2",
-      slug: "only-cloz",
-      title: "Only Cloz",
-      description: "Site vitrine pour une agence de prospection B2C proposant des leads qualifiés et conformes au RGPD.",
-      fullDescription: null,
-      objective: "Présenter l'offre de prospection B2C et sa conformité RGPD.",
-      client: "Only Cloz",
-      duration: null,
-      status: "COMPLETED",
-      url: "https://www.onlycloz.com/",
-      technologies: [],
-      goals: [],
-      solutions: [],
-      caseStudyExcerpt: null,
-      caseStudyChallenge: null,
-      caseStudyApproach: null,
-      caseStudyResults: [],
-      caseStudyServices: ["Site vitrine", "Présence digitale"],
-      image: "/images/realisations/only-cloz.png",
-      published: true,
-      order: 1,
-      createdAt: "",
-      updatedAt: "",
-    },
-    {
-      id: "s3",
-      slug: "vezo-beach-morondava",
-      title: "Le Vezo Beach Morondava",
-      description: "Site web d'un hôtel de charme à Morondava : chambres, restaurant, piscine et massages.",
-      fullDescription: null,
-      objective: "Présenter l'hôtel et ses prestations aux voyageurs.",
-      client: "Le Vezo Beach",
-      duration: null,
-      status: "COMPLETED",
-      url: "https://hotel-vezo-beach-morondava.vercel.app/",
-      technologies: [],
-      goals: [],
-      solutions: [],
-      caseStudyExcerpt: null,
-      caseStudyChallenge: null,
-      caseStudyApproach: null,
-      caseStudyResults: [],
-      caseStudyServices: ["Site vitrine", "Présence digitale"],
-      image: "/images/realisations/vezo-beach-morondava.png",
-      published: true,
-      order: 2,
-      createdAt: "",
-      updatedAt: "",
-    },
-  ];
-
-  const [translatedSamples, setTranslatedSamples] = useState<Project[]>(samples);
   useEffect(() => {
-    let cancelled = false;
-    void translateProjectsContent(samples, locale).then((translated) => {
-      if (!cancelled) setTranslatedSamples(translated);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [locale]);
-
-  const visible = items ?? translatedSamples;
+    if (projects.length <= 3) return;
+    const intervalId = window.setInterval(() => {
+      setVisible((current) => pickRandomProjects(projects, current));
+    }, 40_000);
+    return () => window.clearInterval(intervalId);
+  }, [projects]);
 
   return (
-    <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {visible.map((p, i) => (
-        <Reveal key={p.id} delay={i * 90}>
-          <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-card transition-all duration-500 hover:-translate-y-1.5 hover:border-blue/45 hover:shadow-elevate">
-            <Link to={`/realisations/${p.slug}`} className="relative block aspect-[16/10] overflow-hidden bg-navy">
-              <ProjectImage
-                src={p.image}
-                alt={`${p.title} — aperçu du site`}
-                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-              />
-              <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" aria-hidden />
-              <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/90 backdrop-blur-md">
-                {p.caseStudyServices[0] ?? p.technologies[0] ?? t("realisations.title")}
-              </span>
-              <span className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/65">
-                  {p.client ?? String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/35 bg-white/10 backdrop-blur transition-all duration-300 group-hover:border-blue group-hover:bg-blue group-hover:text-blue-foreground">
-                  <ArrowUpRight className="size-4" aria-hidden />
-                </span>
-              </span>
-            </Link>
-            <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <h3 className="font-heading text-xl font-bold leading-snug tracking-tight text-foreground">
-                <Link to={`/realisations/${p.slug}`} className="transition-colors hover:text-blue">
-                  {p.title}
+    <>
+      {visible.length > 0 && (
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {visible.map((p, i) => (
+            <Reveal key={p.id} delay={i * 90}>
+              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-card transition-all duration-500 hover:-translate-y-1.5 hover:border-blue/45 hover:shadow-elevate">
+                <Link to={`/realisations/${p.slug}`} className="relative block aspect-[16/10] overflow-hidden bg-navy">
+                  <ProjectImage
+                    src={p.image}
+                    alt={`${p.title} — aperçu du site`}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" aria-hidden />
+                  <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/90 backdrop-blur-md">
+                    {p.caseStudyServices[0] ?? p.technologies[0] ?? t("realisations.title")}
+                  </span>
+                  <span className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/65">
+                      {p.client ?? String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/35 bg-white/10 backdrop-blur transition-all duration-300 group-hover:border-blue group-hover:bg-blue group-hover:text-blue-foreground">
+                      <ArrowUpRight className="size-4" aria-hidden />
+                    </span>
+                  </span>
                 </Link>
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                {p.description}
-              </p>
-              <div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-4">
-                <Link
-                  to={`/realisations/${p.slug}`}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground transition-colors hover:text-blue"
-                >
-                  {t("solutions.discover")}
-                  <ArrowUpRight className="size-3.5" aria-hidden />
-                </Link>
-                {p.url && (
-                  <a
-                    href={p.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${t("realisations.viewSite")} — ${p.title}`}
-                    className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {t("realisations.viewSite")}
-                    <ExternalLink className="size-3.5" aria-hidden />
-                  </a>
-                )}
-              </div>
-            </div>
-          </article>
-        </Reveal>
-      ))}
-    </div>
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <h3 className="font-heading text-xl font-bold leading-snug tracking-tight text-foreground">
+                    <Link to={`/realisations/${p.slug}`} className="transition-colors hover:text-blue">
+                      {p.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {p.description}
+                  </p>
+                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-4">
+                    <Link
+                      to={`/realisations/${p.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground transition-colors hover:text-blue"
+                    >
+                      {t("solutions.discover")}
+                      <ArrowUpRight className="size-3.5" aria-hidden />
+                    </Link>
+                    {p.url && (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${t("realisations.viewSite")} — ${p.title}`}
+                        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {t("realisations.viewSite")}
+                        <ExternalLink className="size-3.5" aria-hidden />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
