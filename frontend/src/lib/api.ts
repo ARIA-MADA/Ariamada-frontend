@@ -82,7 +82,8 @@ const patch = <T,>(path: string, data: unknown) =>
   request<T>(path, { method: "PATCH", body: JSON.stringify(data) });
 const del = <T,>(path: string) => request<T>(path, { method: "DELETE" });
 
-const translationRequests = new Map<string, Promise<string[]>>();
+const translationRequests = new Map<string, Promise<string>>();
+let translationQueue: Promise<void> = Promise.resolve();
 
 function translationCacheKey(locale: string, texts: string[]): string {
   const value = JSON.stringify([locale, texts]);
@@ -99,64 +100,119 @@ function translationCacheKey(locale: string, texts: string[]): string {
 export async function translateTexts(texts: string[], locale: "fr" | "en"): Promise<string[]> {
   if (locale === "fr" || texts.length === 0) return texts;
 
-  const batches: string[][] = [];
-  let batch: string[] = [];
-  let batchChars = 0;
-  for (const text of texts) {
-    if (batch.length > 0 && (batch.length >= 500 || batchChars + text.length > 50_000)) {
-      batches.push(batch);
-      batch = [];
-      batchChars = 0;
-    }
-    batch.push(text);
-    batchChars += text.length;
-  }
-  if (batch.length > 0) batches.push(batch);
-  if (batches.length > 1) {
-    const results = new Array<string[]>(batches.length);
-    let nextBatch = 0;
-    const workers = Array.from({ length: Math.min(3, batches.length) }, async () => {
-      while (nextBatch < batches.length) {
-        const index = nextBatch++;
-        results[index] = await translateTexts(batches[index], locale);
-      }
-    });
-    await Promise.all(workers);
-    return results.flat();
-  }
-
-  const key = translationCacheKey(locale, texts);
+  const batchKey = translationCacheKey(locale, texts);
   try {
-    const cached = window.localStorage.getItem(key);
+    const cached = window.localStorage.getItem(batchKey);
     if (cached) {
       const parsed: unknown = JSON.parse(cached);
       if (Array.isArray(parsed) && parsed.length === texts.length && parsed.every((x) => typeof x === "string")) {
+        try {
+          parsed.forEach((translation, index) => {
+            window.localStorage.setItem(
+              translationCacheKey(locale, [texts[index]]),
+              JSON.stringify(translation),
+            );
+          });
+        } catch {
+          /* Le cache par lot reste exploitable si le navigateur n'accepte plus d'écriture. */
+        }
         return parsed;
       }
     }
   } catch {
-    /* Cache désactivé ou indisponible : traduction réseau. */
+    /* Cache désactivé ou indisponible : consultation individuelle ou traduction réseau. */
   }
 
-  const existing = translationRequests.get(key);
-  if (existing) return existing;
+  const resolved = new Map<string, string>();
+  const pending = new Map<string, Promise<string>>();
+  const missing: { text: string; key: string }[] = [];
 
-  const requestPromise = post<{ translations: string[] }>("/translations", { locale, texts })
-    .then(({ translations }) => {
-      if (!Array.isArray(translations) || translations.length !== texts.length) {
+  for (const text of new Set(texts)) {
+    const key = translationCacheKey(locale, [text]);
+    try {
+      const cached = window.localStorage.getItem(key);
+      if (cached !== null) {
+        const parsed: unknown = JSON.parse(cached);
+        if (typeof parsed === "string") {
+          resolved.set(text, parsed);
+          continue;
+        }
+      }
+    } catch {
+      /* Cache désactivé ou entrée invalide : traduction réseau. */
+    }
+
+    const existing = translationRequests.get(key);
+    if (existing) pending.set(text, existing);
+    else missing.push({ text, key });
+  }
+
+  const batches: { text: string; key: string }[][] = [];
+  let batch: { text: string; key: string }[] = [];
+  let batchChars = 0;
+  for (const item of missing) {
+    if (batch.length > 0 && (batch.length >= 80 || batchChars + item.text.length > 8_000)) {
+      batches.push(batch);
+      batch = [];
+      batchChars = 0;
+    }
+    batch.push(item);
+    batchChars += item.text.length;
+  }
+  if (batch.length > 0) batches.push(batch);
+
+  for (const items of batches) {
+    const batchTexts = items.map(({ text }) => text);
+    const requestPromise = translationQueue.then(async () => {
+      const { translations } = await post<{ translations: string[] }>("/translations", {
+        locale,
+        texts: batchTexts,
+      });
+      if (!Array.isArray(translations) || translations.length !== batchTexts.length) {
         throw new Error("Réponse de traduction incomplète");
       }
       try {
-        window.localStorage.setItem(key, JSON.stringify(translations));
+        translations.forEach((translation, index) => {
+          window.localStorage.setItem(
+            items[index].key,
+            JSON.stringify(translation),
+          );
+        });
       } catch {
-        /* Le résultat reste utilisable sans cache. */
+        /* Les traductions restent utilisables sans cache. */
       }
       return translations;
-    })
-    .finally(() => translationRequests.delete(key));
+    });
+    translationQueue = requestPromise.then(() => undefined, () => undefined);
 
-  translationRequests.set(key, requestPromise);
-  return requestPromise;
+    items.forEach(({ text, key }, index) => {
+      const textPromise = requestPromise
+        .then((translations) => translations[index])
+        .finally(() => {
+          if (translationRequests.get(key) === textPromise) {
+            translationRequests.delete(key);
+          }
+        });
+      translationRequests.set(key, textPromise);
+      pending.set(text, textPromise);
+    });
+  }
+
+  const translatedMissing = await Promise.all(
+    [...pending].map(async ([text, promise]) => [text, await promise] as const),
+  );
+  for (const [text, translation] of translatedMissing) resolved.set(text, translation);
+  const result = texts.map((text) => {
+    const translation = resolved.get(text);
+    if (translation === undefined) throw new Error("Traduction manquante pour un texte");
+    return translation;
+  });
+  try {
+    window.localStorage.setItem(batchKey, JSON.stringify(result));
+  } catch {
+    /* Les traductions restent utilisables sans cache. */
+  }
+  return result;
 }
 
 const PROJECT_TEXT_FIELDS = [
@@ -210,6 +266,45 @@ export async function translateProjectsContent(projects: Project[], locale: "fr"
           (result[field.key] as string | null) = translated[cursor++];
         }
       }
+      return result;
+    });
+  } catch {
+    return projects;
+  }
+}
+
+type ProjectPreviewContent = Pick<
+  Project,
+  "title" | "description" | "client" | "technologies" | "caseStudyServices"
+>;
+
+export async function translateProjectPreviewsContent<T extends ProjectPreviewContent>(
+  projects: T[],
+  locale: "fr" | "en",
+): Promise<T[]> {
+  if (locale === "fr" || projects.length === 0) return projects;
+
+  const values = projects.flatMap((project) => [
+    project.title,
+    project.description,
+    ...(project.client ? [project.client] : []),
+    ...project.technologies,
+    ...project.caseStudyServices,
+  ]);
+  if (values.length === 0) return projects;
+
+  try {
+    const translated = await translateTexts(values, locale);
+    let cursor = 0;
+    return projects.map((project) => {
+      const result: T = { ...project };
+      result.title = translated[cursor++];
+      result.description = translated[cursor++];
+      if (project.client) result.client = translated[cursor++];
+      result.technologies = translated.slice(cursor, cursor + project.technologies.length);
+      cursor += project.technologies.length;
+      result.caseStudyServices = translated.slice(cursor, cursor + project.caseStudyServices.length);
+      cursor += project.caseStudyServices.length;
       return result;
     });
   } catch {

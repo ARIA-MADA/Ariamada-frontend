@@ -11,7 +11,7 @@ Monorepo : **frontend React + TypeScript + Vite** · **API Express déployée en
 | Base | PostgreSQL (Neon) |
 | Images | Vercel Blob en production ; stockage local en développement |
 | IA | Groq (clé **côté serveur uniquement**) — proxy `/api/chat` |
-| i18n | FR source / EN généré automatiquement et mis en cache |
+| i18n | FR source / EN généré automatiquement, cache partagé PostgreSQL et cache navigateur |
 
 ## Démarrage
 
@@ -71,7 +71,7 @@ créer de doublons. Exécutez `npm run db:seed:showcase` après avoir configuré
 ## Sécurité
 
 - Clé Groq **jamais** dans le bundle : elle est définie dans les variables d'environnement serveur.
-- La traduction automatique des contenus publics réutilise `GROQ_API_KEY`. Les traductions générées sont mises en cache côté serveur et navigateur ; les textes juridiques doivent être relus avant publication.
+- La traduction automatique des contenus publics réutilise `GROQ_API_KEY`. Les traductions générées sont partagées entre visiteurs dans `translation_cache`, et mises en cache dans le navigateur. Une empreinte du texte source, de la langue et du modèle évite de réutiliser une traduction après modification du contenu ou changement de modèle. Les messages du chatbot ne sont pas persistés dans ce cache ; les textes juridiques doivent être relus avant publication.
 - Auth par **cookie httpOnly** (`aria_token`) + JWT signé, mots de passe bcrypt (12 rounds).
 - Rate limiting : global 600/15 min, formulaires & chat 20/15 min, login 10/15 min.
 - Sur Vercel, ces compteurs mémoire sont propres à chaque instance serverless ; configurez un store distribué ou le pare-feu Vercel pour une limite partagée entre instances.
@@ -86,7 +86,7 @@ Le frontend et l’API sont déployés depuis le même dépôt Vercel. Il n’y 
 2. Créer/configurer un projet PostgreSQL sur Neon et renseigner dans Vercel `DATABASE_URL` (URL de connexion Neon avec SSL).
 3. Renseigner également `JWT_SECRET` (au moins 32 caractères aléatoires), `ADMIN_EMAIL` et `ADMIN_PASSWORD`. Ajouter `GROQ_API_KEY` et éventuellement `GROQ_MODEL` pour activer le chatbot et la traduction automatique.
 4. Créer un store Vercel Blob et l’associer au projet pour fournir `BLOB_READ_WRITE_TOKEN`. Les fichiers sont stockés dans Blob, pas sur le disque éphémère des fonctions.
-5. Déployer, puis appliquer le schéma Prisma avec `npm run db:deploy -w backend` en utilisant la même `DATABASE_URL`. Pour initialiser les données et le compte admin, exécuter `npm run db:seed -w backend` avec les variables de production fournies de façon sécurisée.
+5. Appliquer les migrations Prisma avec `npm run db:deploy -w backend` en utilisant la même `DATABASE_URL` (cela crée aussi la table `translation_cache`). Pour initialiser les données et le compte admin, exécuter `npm run db:seed -w backend` avec les variables de production fournies de façon sécurisée.
 
 Les variables de production doivent être configurées dans **Vercel → Project Settings → Environment Variables** ; ne jamais les préfixer avec `VITE_`. Les anciennes images enregistrées sous forme d’URL locale `/api/files/...` doivent être migrées vers Blob pour être disponibles après déploiement.
 

@@ -8,7 +8,7 @@ import {
 import { useI18n } from "@/i18n";
 import { useTheme } from "@/lib/theme";
 import { PageTitle } from "@/components/layout/PageShell";
-import { projectsApi } from "@/lib/api";
+import { projectsApi, translateProjectPreviewsContent } from "@/lib/api";
 import { SHOWCASE_PROJECTS, type ProjectPreview } from "@/data/showcaseProjects";
 import Hero from "@/components/home/Hero";
 import {
@@ -489,20 +489,21 @@ export default function Home() {
 function RealisationsPreview() {
   const { t, locale } = useI18n();
   const [projects, setProjects] = useState<ProjectPreview[]>(SHOWCASE_PROJECTS);
-  const [visible, setVisible] = useState<ProjectPreview[]>(() =>
+  const [selectedProjects, setSelectedProjects] = useState<ProjectPreview[]>(() =>
     pickRandomProjects(SHOWCASE_PROJECTS),
   );
+  const [visible, setVisible] = useState<ProjectPreview[]>(selectedProjects);
 
   useEffect(() => {
     let cancelled = false;
 
     projectsApi
-      .listPublished(locale)
+      .listPublished("fr")
       .then((res) => {
         if (cancelled) return;
         const availableProjects = res.items.length > 0 ? res.items : SHOWCASE_PROJECTS;
         setProjects(availableProjects);
-        setVisible(pickRandomProjects(availableProjects));
+        setSelectedProjects(pickRandomProjects(availableProjects));
       })
       .catch((cause: unknown) => {
         console.error("Erreur lors du chargement des réalisations de la page d'accueil :", cause);
@@ -511,12 +512,22 @@ function RealisationsPreview() {
     return () => {
       cancelled = true;
     };
-  }, [locale]);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    void translateProjectPreviewsContent(selectedProjects, locale).then((translated) => {
+      if (!cancelled) setVisible(translated);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [locale, selectedProjects]);
 
   useEffect(() => {
     if (projects.length <= 3) return;
     const intervalId = window.setInterval(() => {
-      setVisible((current) => pickRandomProjects(projects, current));
+      setSelectedProjects((current) => pickRandomProjects(projects, current));
     }, 40_000);
     return () => window.clearInterval(intervalId);
   }, [projects]);

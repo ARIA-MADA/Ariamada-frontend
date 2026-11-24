@@ -51,6 +51,20 @@ model User {
   @@map("users")
 }
 
+model TranslationCache {
+  id             String   @id @default(cuid())
+  locale         String
+  model          String
+  sourceHash     String
+  sourceText     String   @db.Text
+  translatedText String   @db.Text
+  updatedAt      DateTime @default(now()) @updatedAt
+
+  @@unique([locale, model, sourceHash])
+  @@index([updatedAt])
+  @@map("translation_cache")
+}
+
 /* ============================================================
    Réalisations / projets
    ============================================================ */

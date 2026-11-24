@@ -1,15 +1,19 @@
 import { createHash } from "node:crypto";
 import { config } from "../config.js";
+import { prisma } from "../prisma.js";
 
-const CACHE_LIMIT = 200;
-const CACHE = new Map<string, string[]>();
-const IN_FLIGHT = new Map<string, Promise<string[]>>();
+const CACHE_LIMIT = 2_000;
+const CACHE = new Map<string, string>();
+const IN_FLIGHT = new Map<string, Promise<string>>();
+let translationQueue: Promise<void> = Promise.resolve();
 
-function cacheKey(texts: string[], locale: string): string {
-  return createHash("sha256").update(`${locale}\0${JSON.stringify(texts)}`).digest("hex");
+function cacheKey(text: string, locale: string): string {
+  return createHash("sha256")
+    .update(`${locale}\0${config.groq.model}\0${text}`)
+    .digest("hex");
 }
 
-function remember(key: string, value: string[]): void {
+function remember(key: string, value: string): void {
   CACHE.delete(key);
   CACHE.set(key, value);
   if (CACHE.size > CACHE_LIMIT) {
@@ -70,54 +74,126 @@ async function translateChunk(texts: string[], locale: string): Promise<string[]
   return parseTranslation(content, texts.length);
 }
 
-export async function translateTexts(texts: string[], locale: "fr" | "en"): Promise<string[]> {
+interface TranslateOptions {
+  persist?: boolean;
+}
+
+export async function translateTexts(
+  texts: string[],
+  locale: "fr" | "en",
+  { persist = false }: TranslateOptions = {},
+): Promise<string[]> {
   if (locale === "fr") return texts;
-  if (!config.groq.apiKey) throw new Error("La traduction automatique nécessite GROQ_API_KEY");
   if (texts.length === 0) return [];
 
-  const key = cacheKey(texts, locale);
-  const cached = CACHE.get(key);
-  if (cached) {
-    CACHE.delete(key);
-    CACHE.set(key, cached);
-    return cached;
-  }
-  const existing = IN_FLIGHT.get(key);
-  if (existing) return existing;
+  const resolved = new Map<string, string>();
+  const pending = new Map<string, Promise<string>>();
+  const missing: { text: string; key: string }[] = [];
 
-  const work = (async () => {
-    const chunks: string[][] = [];
-    let chunk: string[] = [];
+  if (persist) {
+    const uncached = [...new Set(texts)].filter((text) => !CACHE.has(cacheKey(text, locale)));
+    if (uncached.length > 0) {
+      const hashes = uncached.map((text) => cacheKey(text, locale));
+      const rows = await prisma.translationCache.findMany({
+        where: {
+          locale,
+          model: config.groq.model,
+          sourceHash: { in: hashes },
+        },
+        select: { sourceHash: true, sourceText: true, translatedText: true },
+      });
+      const byHash = new Map(rows.map((row) => [row.sourceHash, row]));
+      for (const text of uncached) {
+        const key = cacheKey(text, locale);
+        const row = byHash.get(key);
+        if (row && row.sourceText === text) {
+          remember(key, row.translatedText);
+        }
+      }
+    }
+  }
+
+  for (const text of new Set(texts)) {
+    const key = cacheKey(text, locale);
+    const cached = CACHE.get(key);
+    if (cached !== undefined) {
+      remember(key, cached);
+      resolved.set(text, cached);
+      continue;
+    }
+
+    const existing = IN_FLIGHT.get(key);
+    if (existing) pending.set(text, existing);
+    else missing.push({ text, key });
+  }
+
+  if (missing.length > 0) {
+    if (!config.groq.apiKey) {
+      throw new Error("La traduction automatique nécessite GROQ_API_KEY");
+    }
+
+    const chunks: { text: string; key: string }[][] = [];
+    let chunk: { text: string; key: string }[] = [];
     let chars = 0;
-    for (const text of texts) {
-      if (chunk.length > 0 && (chunk.length >= 80 || chars + text.length > 12_000)) {
+    for (const item of missing) {
+      if (chunk.length > 0 && (chunk.length >= 20 || chars + item.text.length > 4_000)) {
         chunks.push(chunk);
         chunk = [];
         chars = 0;
       }
-      chunk.push(text);
-      chars += text.length;
+      chunk.push(item);
+      chars += item.text.length;
     }
     if (chunk.length > 0) chunks.push(chunk);
 
-    const translatedChunks = new Array<string[]>(chunks.length);
-    let nextChunk = 0;
-    const workers = Array.from({ length: Math.min(4, chunks.length) }, async () => {
-      while (nextChunk < chunks.length) {
-        const index = nextChunk++;
-        translatedChunks[index] = await translateChunk(chunks[index], locale);
-      }
-    });
-    await Promise.all(workers);
-    const translated = translatedChunks.flat();
-    remember(key, translated);
-    return translated;
-  })();
+    for (const items of chunks) {
+      const chunkTexts = items.map(({ text }) => text);
+      const work = translationQueue.then(async () => {
+        const translations = await translateChunk(chunkTexts, locale);
+        if (persist) {
+          try {
+            await prisma.translationCache.createMany({
+              data: items.map(({ text, key }, index) => ({
+                id: `translation-${key}`,
+                locale,
+                model: config.groq.model,
+                sourceHash: key,
+                sourceText: text,
+                translatedText: translations[index],
+              })),
+              skipDuplicates: true,
+            });
+          } catch (error) {
+            console.error("[translation] Impossible de sauvegarder les traductions en base", error);
+          }
+        }
+        return translations;
+      });
+      translationQueue = work.then(() => undefined, () => undefined);
 
-  IN_FLIGHT.set(key, work);
-  try {
-    return await work;
-  } finally {
-    IN_FLIGHT.delete(key);
+      items.forEach(({ text, key }, index) => {
+        const textWork = work
+          .then((translations) => {
+            const translatedText = translations[index];
+            remember(key, translatedText);
+            return translatedText;
+          })
+          .finally(() => {
+            if (IN_FLIGHT.get(key) === textWork) IN_FLIGHT.delete(key);
+          });
+        IN_FLIGHT.set(key, textWork);
+        pending.set(text, textWork);
+      });
+    }
   }
+
+  const translatedPending = await Promise.all(
+    [...pending].map(async ([text, promise]) => [text, await promise] as const),
+  );
+  for (const [text, translation] of translatedPending) resolved.set(text, translation);
+  return texts.map((text) => {
+    const translation = resolved.get(text);
+    if (translation === undefined) throw new Error("Traduction manquante pour un texte");
+    return translation;
+  });
 }
