@@ -3,7 +3,7 @@
    ============================================================ */
 
 /** Statut d'un projet / réalisation */
-export type ProjectStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
+export type ProjectStatus = "PENDING" | "IN_PROGRESS" | "STANDBY" | "COMPLETED";
 
 /** Rôle d'utilisateur admin */
 export type UserRole = "ADMIN" | "EDITOR";

@@ -11,12 +11,14 @@ import type { TranslationKey } from "@/i18n/fr";
 const STATUS_LABEL: Record<Project["status"], TranslationKey> = {
   PENDING: "project.status.pending",
   IN_PROGRESS: "project.status.inProgress",
+  STANDBY: "project.status.standby",
   COMPLETED: "project.status.completed",
 };
 
 const STATUS_STYLE: Record<Project["status"], string> = {
   PENDING: "border-line text-muted-foreground",
   IN_PROGRESS: "border-coral/40 text-coral",
+  STANDBY: "border-amber-400/40 text-amber-600",
   COMPLETED: "border-blue/40 text-blue",
 };
 

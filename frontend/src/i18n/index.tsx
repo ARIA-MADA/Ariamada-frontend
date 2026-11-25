@@ -18,6 +18,9 @@ import { translateTexts } from "@/lib/api";
 export type Locale = "fr" | "en";
 
 const STORAGE_KEY = "aria-locale";
+const ENGLISH_OVERRIDES: Partial<Record<TranslationKey, string>> = {
+  "project.status.standby": "Stand-by",
+};
 
 interface I18nContextValue {
   locale: Locale;
@@ -90,7 +93,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const t = useCallback(
     (key: TranslationKey) =>
       locale === "en"
-        ? automaticEnglish[key] ?? fr[key] ?? key
+        ? ENGLISH_OVERRIDES[key] ?? automaticEnglish[key] ?? fr[key] ?? key
         : fr[key] ?? key,
     [locale, automaticEnglish],
   );

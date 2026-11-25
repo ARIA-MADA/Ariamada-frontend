@@ -337,6 +337,7 @@ export const fr = {
     "La page que vous cherchez n'existe pas ou a été déplacée.",
   "project.status.pending": "En attente",
   "project.status.inProgress": "En cours",
+  "project.status.standby": "En suspens",
   "project.status.completed": "Terminé",
   "common.requestAInfo": "Demander un devis",
   "common.talkToUs": "Parler à l'équipe",

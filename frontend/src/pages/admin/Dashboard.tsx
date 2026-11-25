@@ -257,7 +257,9 @@ function scoreProjectSearch(project: Project, query: string, terms: string[]) {
       ? "termine completed"
       : project.status === "IN_PROGRESS"
         ? "en cours in progress"
-        : "en attente pending";
+        : project.status === "STANDBY"
+          ? "en suspens stand-by"
+          : "en attente pending";
   const fields: { value: string; weight: number }[] = [
     { value: project.title, weight: 100 },
     { value: project.client ?? "", weight: 85 },
@@ -784,6 +786,7 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
               >
                 <option value="PENDING">En attente</option>
                 <option value="IN_PROGRESS">En cours</option>
+                <option value="STANDBY">En suspens</option>
                 <option value="COMPLETED">Terminé</option>
               </select>
             </label>
@@ -854,7 +857,7 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
                 <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center gap-2"><p className="truncate font-heading text-sm font-bold text-foreground sm:text-[15px]">{p.title}</p><span className={`hidden shrink-0 rounded-full px-2 py-1 text-[10px] font-semibold sm:inline-flex ${p.published ? "bg-blue/10 text-blue" : "bg-surface-2 text-muted-foreground"}`}>{p.published ? "Publié" : "Brouillon"}</span></div>
                   <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground sm:truncate">{p.description}</p>
-                  <p className="mt-1 truncate text-[10px] text-muted-foreground/80">{p.client || "Projet ARIA"} · {p.status === "COMPLETED" ? "Terminé" : p.status === "IN_PROGRESS" ? "En cours" : "En attente"}</p>
+                  <p className="mt-1 truncate text-[10px] text-muted-foreground/80">{p.client || "Projet ARIA"} · {p.status === "COMPLETED" ? "Terminé" : p.status === "IN_PROGRESS" ? "En cours" : p.status === "STANDBY" ? "En suspens" : "En attente"}</p>
                 </div>
               </div>
               <div className="grid w-full grid-cols-2 gap-2 border-t border-line pt-3 sm:flex sm:w-auto sm:flex-wrap sm:items-center sm:justify-end sm:gap-2 sm:border-0 sm:pt-0">
@@ -884,6 +887,7 @@ function ProjectsPanel({ onOpenDetail }: { onOpenDetail: (id: string) => void })
                   >
                     <option value="PENDING">En attente</option>
                     <option value="IN_PROGRESS">En cours</option>
+                    <option value="STANDBY">En suspens</option>
                     <option value="COMPLETED">Terminé</option>
                   </select>
                 </label>

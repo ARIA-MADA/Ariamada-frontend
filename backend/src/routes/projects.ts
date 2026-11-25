@@ -13,7 +13,7 @@ const projectSchema = z.object({
   objective: z.string().max(1000).nullish(),
   client: z.string().max(300).nullish(),
   duration: z.string().max(200).nullish(),
-  status: z.enum(["PENDING", "IN_PROGRESS", "COMPLETED"]).default("PENDING"),
+  status: z.enum(["PENDING", "IN_PROGRESS", "STANDBY", "COMPLETED"]).default("PENDING"),
   url: z.string().max(1000).nullish(),
   technologies: z.array(z.string().max(120)).max(40).default([]),
   goals: z.array(z.string().max(500)).max(40).default([]),

@@ -19,6 +19,7 @@ enum UserRole {
 enum ProjectStatus {
   PENDING
   IN_PROGRESS
+  STANDBY
   COMPLETED
 }
 
