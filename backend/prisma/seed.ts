@@ -79,7 +79,7 @@ async function main() {
         category: "equipe",
         question: "Qui est ARIA ?",
         answer:
-          "ARIA — Accompagnement Digital est une agence digitale basée à Antsirabe, Madagascar, avec environ 25 talents. Nous avons réalisé plus de 50 projets pour plus de 40 clients.",
+          "Nous sommes ARIA — Accompagnement Digital, une agence digitale basée à Antsirabe, Madagascar. Notre équipe compte environ 25 talents. Nous avons réalisé plus de 50 projets pour plus de 40 clients.",
       },
       {
         category: "services",
