@@ -108,9 +108,8 @@ export default function Realisations() {
                     <ProjectImage
                       src={p.image}
                       alt={`${p.title} — aperçu du site`}
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                      className="size-full object-contain"
                     />
-                    <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" aria-hidden />
                     <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/90 backdrop-blur-md">
                       {p.caseStudyServices[0] ?? p.technologies[0] ?? t("realisations.title")}
                     </span>
@@ -119,11 +118,11 @@ export default function Realisations() {
                     >
                       {t(STATUS_LABEL[p.status])}
                     </span>
-                    <span className="absolute bottom-3 left-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/75">
-                      {p.client ?? String(i + 1).padStart(2, "0")}
-                    </span>
                   </div>
                   <div className="flex flex-1 flex-col p-5 sm:p-6">
+                    <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                      {p.client ?? String(i + 1).padStart(2, "0")}
+                    </p>
                     <h2 className="font-heading text-lg font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-blue">
                       {p.title}
                     </h2>

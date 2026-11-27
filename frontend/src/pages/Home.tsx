@@ -543,22 +543,18 @@ function RealisationsPreview() {
                   <ProjectImage
                     src={p.image}
                     alt={`${p.title} — aperçu du site`}
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                    className="size-full object-contain"
                   />
-                  <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" aria-hidden />
-                  <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-white/90 backdrop-blur-md">
-                    {p.caseStudyServices[0] ?? p.technologies[0] ?? t("realisations.title")}
-                  </span>
-                  <span className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/65">
-                      {p.client ?? String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/35 bg-white/10 backdrop-blur transition-all duration-300 group-hover:border-blue group-hover:bg-blue group-hover:text-blue-foreground">
-                      <ArrowUpRight className="size-4" aria-hidden />
-                    </span>
-                  </span>
                 </Link>
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <span className="rounded-full border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                      {p.caseStudyServices[0] ?? p.technologies[0] ?? t("realisations.title")}
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                      {p.client ?? String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
                   <h3 className="font-heading text-xl font-bold leading-snug tracking-tight text-foreground">
                     <Link to={`/realisations/${p.slug}`} className="transition-colors hover:text-blue">
                       {p.title}

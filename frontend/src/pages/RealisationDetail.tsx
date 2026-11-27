@@ -121,7 +121,7 @@ export default function RealisationDetail() {
             src={project.image}
             alt={project.title}
             loading="eager"
-            className="max-h-[min(70vh,42rem)] min-h-64 w-full rounded-2xl border border-line bg-card object-cover shadow-elevate sm:min-h-80"
+            className="h-auto max-h-[min(70vh,42rem)] w-full rounded-2xl border border-line bg-card object-contain shadow-elevate"
           />
         </Reveal>
       </div>
