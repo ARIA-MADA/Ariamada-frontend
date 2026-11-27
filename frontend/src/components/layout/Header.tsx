@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useI18n } from "@/i18n";
-import { useTheme } from "@/lib/theme";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 
 interface NavItem {
@@ -21,7 +20,6 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function Header() {
   const { t, locale, setLocale } = useI18n();
-  const { theme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -52,7 +50,7 @@ export default function Header() {
   return (
     <>
     <header
-      className={`sticky inset-x-0 top-0 z-50 border-b border-line bg-background transition-shadow duration-300 ${
+      className={`on-dark sticky inset-x-0 top-0 z-50 border-b border-line bg-background transition-shadow duration-300 ${
         scrolled
           ? "shadow-[0_16px_40px_-20px_rgba(0,0,0,0.95)]"
           : "shadow-[0_8px_30px_-24px_rgba(0,0,0,0.9)]"
@@ -70,7 +68,7 @@ export default function Header() {
           aria-label={t("aria.homeLabel")}
           className="group flex min-w-0 items-center gap-2.5"
         >
-          <span className={`relative size-14 shrink-0 sm:size-20 ${theme === "light" ? "rounded-2xl bg-[#102b37] p-1 shadow-[0_4px_14px_rgba(16,43,55,0.2)]" : ""}`}>
+          <span className="relative size-14 shrink-0 sm:size-20">
             <img
               src="/images/aria-logo.png"
               alt=""
@@ -78,25 +76,17 @@ export default function Header() {
               className="size-full object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </span>
-          <span className="hidden min-w-0 sm:block">
-            <span className="block truncate font-heading text-2xl font-extrabold leading-none tracking-tight text-foreground">
-              ARIA
-            </span>
-            <span className="hidden truncate font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground sm:block">
-              {t("brand.nameDescriptor")}
-            </span>
-          </span>
         </Link>
 
         {/* Nav desktop */}
-        <nav className="hidden min-w-0 items-center justify-center gap-1 xl:flex">
+        <nav className="hidden min-w-0 items-center justify-center gap-3 xl:flex">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === "/"}
               className={({ isActive }) =>
-                `rounded-full px-3.5 py-2 text-[15px] font-medium transition-all duration-200 hover:bg-surface-2 ${
+                `rounded-full px-5 py-2 text-[15px] font-medium transition-all duration-200 hover:bg-surface-2 ${
                   isActive
                     ? "bg-surface-2 text-blue ring-1 ring-line"
                     : "text-muted-foreground hover:text-foreground"
@@ -174,7 +164,7 @@ export default function Header() {
       <div
         ref={mobileMenuRef}
         aria-hidden={!mobileOpen}
-        className={`fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-line bg-background/98 backdrop-blur-xl transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none sm:top-[5.5rem] xl:hidden ${
+        className={`on-dark fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-line bg-background/98 backdrop-blur-xl transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none sm:top-[5.5rem] xl:hidden ${
           mobileOpen
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-2 opacity-0 delay-300"

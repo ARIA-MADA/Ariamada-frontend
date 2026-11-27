@@ -449,6 +449,7 @@ html.light .partner-logo-recolor-light {
 
     /* Les utilitaires lisent --color-* (résolus à :root) : on les re-définit
        ici, sinon le thème clair rendrait du texte foncé sur ces fonds sombres. */
+    --color-background: #1a1715;
     --color-foreground: #f5f3f1;
     --color-card: #24201d;
     --color-card-foreground: #f5f3f1;
