@@ -473,7 +473,16 @@ html.light .partner-logo-recolor-light {
     --shadow-soft: 0 8px 30px -24px rgb(0 0 0 / 0.6);
   }
 
-  /* Scrollbar discrète, adaptée au thème */
+  /* Masque l'indicateur de la scrollbar principale sans bloquer le défilement. */
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Scrollbars des zones défilantes internes, adaptées au thème */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
